@@ -2,7 +2,7 @@
 
 namespace PaaPindenAPI.Repositories
 {
-    public class CommentRepository
+    public class CommentRepository : ICommentRepository
     {
         private static List<Comment> comments = new List<Comment>
         {
@@ -25,10 +25,29 @@ namespace PaaPindenAPI.Repositories
             }
         };
 
+        public void CreateCommentAsync(Comment comment)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteCommentAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Comment> GetAllCommentsAsync()
+        {
+            throw new NotImplementedException();
+        }
 
         public List<Comment> GetComments()
         {
             return comments;
+        }
+
+        public Comment UpdateCommentAsync(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

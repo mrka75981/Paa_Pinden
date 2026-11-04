@@ -8,8 +8,8 @@
 
         public string Text { get; set; }
 
-        public List<string> Pictures { get; set; }
+        public List<ContentPicture> Pictures { get; set; }
 
-        public List<string> Videos { get; set; }
+        public List<ContentVideo> Videos { get; set; }
     }
 }
