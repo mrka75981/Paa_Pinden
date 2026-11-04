@@ -1,1 +1,4 @@
-<Solution />
+<Solution>
+  <Project Path="FirstTests/Tests.csproj" />
+  <Project Path="PaaPindenAPI/PaaPindenAPI.csproj" />
+</Solution>
