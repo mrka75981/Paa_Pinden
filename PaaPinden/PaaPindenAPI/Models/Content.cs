@@ -1,0 +1,15 @@
+﻿namespace PaaPindenAPI.Models
+{
+    public class Content
+    {
+        public KnittingPost ContentKnittingPost { get; set; }
+
+        public int Id { get; set; }
+
+        public string Text { get; set; }
+
+        public List<string> Pictures { get; set; }
+
+        public List<string> Videos { get; set; }
+    }
+}
