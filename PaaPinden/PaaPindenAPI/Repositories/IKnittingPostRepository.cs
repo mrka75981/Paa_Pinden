@@ -4,7 +4,7 @@ namespace PaaPindenAPI.Repositories
 {
     public interface IKnittingPostRepository
     {
-        public Task CreateKnittingPostAsync();
+        public Task CreateKnittingPostAsync(KnittingPost knittingPost);
 
         public Task<KnittingPost> GetKnittingPostAsync(int id);
 

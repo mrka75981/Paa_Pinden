@@ -1,4 +1,5 @@
-﻿using PaaPindenAPI.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using PaaPindenAPI.Data;
 using PaaPindenAPI.Models;
 
 namespace PaaPindenAPI.Repositories
@@ -12,29 +13,45 @@ namespace PaaPindenAPI.Repositories
             _paaPindenContext = paaPindenContext;
         }
 
-        public Task CreateKnittingPostAsync()
+        public async Task CreateKnittingPostAsync(KnittingPost knittingPost)
         {
-            throw new NotImplementedException();
+            await _paaPindenContext.KnittingPosts.AddAsync(knittingPost);
+            await _paaPindenContext.SaveChangesAsync();
         }
 
-        public Task DeleteKnittingPostAsync(int id)
+        public async Task DeleteKnittingPostAsync(int id)
         {
-            throw new NotImplementedException();
+            var knittingPost = await _paaPindenContext.KnittingPosts.FindAsync(id);
+            if (knittingPost != null)
+            {
+                _paaPindenContext.KnittingPosts.Remove(knittingPost);
+                await _paaPindenContext.SaveChangesAsync();
+            }
         }
 
-        public Task<List<KnittingPost>> GetAllKnittingPostAsync()
+        public async Task<List<KnittingPost>> GetAllKnittingPostAsync()
         {
-            throw new NotImplementedException();
+            List<KnittingPost> knittingPosts = await _paaPindenContext.KnittingPosts
+                .Include(k => k.Comments)
+                .Include(k => k.KnittingPostContent).ToListAsync();
+            return knittingPosts;
         }
 
-        public Task<KnittingPost> GetKnittingPostAsync(int id)
+        public async Task<KnittingPost> GetKnittingPostAsync(int id)
         {
-            throw new NotImplementedException();
+            var knittingPost = await _paaPindenContext.KnittingPosts.FindAsync(id);
+            if (knittingPost != null)
+            {
+                return knittingPost;
+            }
+            return null;
         }
 
-        public Task UpdateKnittingPostAsync(KnittingPost knittingPost)
+        public async Task UpdateKnittingPostAsync(KnittingPost knittingPost)
         {
-            throw new NotImplementedException();
+            _paaPindenContext.KnittingPosts.Update(knittingPost);
+
+            await _paaPindenContext.SaveChangesAsync();
         }
     }
 }

@@ -6,7 +6,7 @@ namespace PaaPindenAPI.Repositories
     {
         public Task CreateCommentAsync(Comment comment);
 
-        public Task<Comment> UpdateCommentAsync(Comment comment);
+        public Task UpdateCommentAsync(Comment comment);
 
         public Task<List<Comment>> GetAllPostCommentsAsync(int id);
 

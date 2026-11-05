@@ -12,24 +12,37 @@ namespace PaaPindenAPI.Repositories
             _paaPindenContext = paaPindenContext;
         }
 
-        public Task CreateCommentAsync(Comment comment)
+        public async Task CreateCommentAsync(Comment comment)
         {
-            throw new NotImplementedException();
+            await _paaPindenContext.Comments.AddAsync(comment);
+            await _paaPindenContext.SaveChangesAsync();
         }
 
-        public Task DeleteCommentAsync(int id)
+        public async Task DeleteCommentAsync(int id)
         {
-            throw new NotImplementedException();
+            var comment = await _paaPindenContext.Comments.FindAsync(id);
+            if (comment != null)
+            {
+                _paaPindenContext.Comments.Remove(comment);
+                await _paaPindenContext.SaveChangesAsync();
+            }
         }
 
-        public Task<List<Comment>> GetAllPostCommentsAsync(int id)
+        public async Task<List<Comment>> GetAllPostCommentsAsync(int id)
         {
-            throw new NotImplementedException();
+            var knittingPost = await _paaPindenContext.KnittingPosts.FindAsync(id);
+            if (knittingPost != null)
+            {
+                return knittingPost.Comments;
+            }
+            return null;
         }
 
-        public Task<Comment> UpdateCommentAsync(Comment comment)
+        public async Task UpdateCommentAsync(Comment comment)
         {
-            throw new NotImplementedException();
+            _paaPindenContext.Comments.Update(comment);
+
+            await _paaPindenContext.SaveChangesAsync();
         }
     }
 }
