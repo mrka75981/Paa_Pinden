@@ -39,7 +39,9 @@ namespace PaaPindenAPI.Data
 
             modelbuilder.Entity<Comment>()
                 .HasOne<KnittingPost>()
-                .WithMany(k => k.Comments);
+                .WithMany(k => k.Comments)
+                .HasForeignKey(c => c.Id)
+                .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }

@@ -15,13 +15,11 @@ namespace PaaPindenAPI.Migrations
                 name: "Comments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     CommentKnittingPostId = table.Column<int>(type: "int", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Writer = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    KnittingPostId = table.Column<int>(type: "int", nullable: false)
+                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -100,11 +98,6 @@ namespace PaaPindenAPI.Migrations
                 column: "CommentKnittingPostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_KnittingPostId",
-                table: "Comments",
-                column: "KnittingPostId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ContentPictures_ContentId",
                 table: "ContentPictures",
                 column: "ContentId");
@@ -133,12 +126,11 @@ namespace PaaPindenAPI.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Comments_KnittingPosts_KnittingPostId",
+                name: "FK_Comments_KnittingPosts_Id",
                 table: "Comments",
-                column: "KnittingPostId",
+                column: "Id",
                 principalTable: "KnittingPosts",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_ContentPictures_Contents_ContentId",
