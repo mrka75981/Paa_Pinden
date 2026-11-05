@@ -4,13 +4,13 @@ namespace PaaPindenAPI.Repositories
 {
     public interface ICommentRepository
     {
-        void CreateCommentAsync(Comment comment);
+        Task CreateCommentAsync(Comment comment);
 
-        Comment UpdateCommentAsync(int id);
+        Task<Comment> UpdateCommentAsync(int id);
 
-        List<Comment> GetAllCommentsAsync();
+        Task<List<Comment>> GetAllPostCommentsAsync(int id);
 
-        void DeleteCommentAsync(int id);
+        Task DeleteCommentAsync(int id);
 
     }
 
