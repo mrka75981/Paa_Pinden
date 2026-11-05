@@ -6,20 +6,49 @@ namespace Tests
     [TestClass]
     public sealed class KnittingPostRepositoryUnitTest
     {
-        KnittingPostRepository knittingPostRepository;
-
-        CommentRepository commentRepository;
-
-        KnittingPost expectedResult;
+        IKnittingPostRepository? testMethodRepo;
+        IKnittingPostRepository? testInitializeRepo;
+        KnittingPost? testMethodKnittingPost;
+        KnittingPost? testInitializeKnittingPost;
 
         [TestInitialize]
-        private async void Init()
+        public async Task Init()
         {
-            KnittingPostRepository knittingPostRepository = new KnittingPostRepository();
-
-            CommentRepository commentRepository = new CommentRepository();
-
-            var expectedResult = new KnittingPost
+            testMethodRepo = new KnittingPostRepository();
+            testInitializeRepo = new KnittingPostRepository();
+            testMethodKnittingPost = new KnittingPost
+            {
+                Title = "test opslag",
+                TimeStamp = DateTime.Today,
+                Author = "Jens",
+                Comments = new List<Comment>()
+                {
+                    new Comment
+                    {
+                        Text = "test opslags kommentar",
+                        Writer = "jens fjende",
+                        TimeStamp = DateTime.Today
+                    }
+                },
+                KnittingPostContent = new Content
+                {
+                    Pictures = new List<ContentPicture>()
+                    {
+                        new ContentPicture
+                        {
+                            Path = "~/path/to/testpicture"
+                        }
+                    },
+                    Videos = new List<ContentVideo>()
+                    {
+                        new ContentVideo
+                        {
+                            Path = "~/path/to/testvideo"
+                        }
+                    }
+                }
+            };
+            testInitializeKnittingPost = new KnittingPost
             {
                 Title = "Første opslag",
                 TimeStamp = DateTime.Today,
@@ -40,141 +69,93 @@ namespace Tests
                         new ContentPicture
                         {
                             Path = "~/path/to/picture"
-
                         }
-
-
                     },
                     Videos = new List<ContentVideo>()
                     {
                         new ContentVideo
                         {
                             Path = "~/path/to/video"
-
                         }
                     }
-
-
                 }
             };
+
+            //await testInitializeRepo.DeleteAllKnittingPostsAsync();
+            await testInitializeRepo.CreateKnittingPostAsync(testInitializeKnittingPost);
         }
+
         [TestMethod]
         public async Task CreateKnittingPostAsync_Test()
         {
-            // Arange 
-            
-            var testPost = expectedResult;
+            // Arange
+            var expectedResult = testMethodKnittingPost;
 
-            // Act 
-            
-            knittingPostRepository.CreateKnittingPostAsync(testPost);
+            // Act
+            await testMethodRepo.CreateKnittingPostAsync(testMethodKnittingPost);
 
             // Assert
-
-            var actualResult = await knittingPostRepository.GetKnittingPostAsync(testPost.Id);
+            var actualResult = await testMethodRepo.GetKnittingPostAsync(testMethodKnittingPost.Id);
             Assert.AreEqual(expectedResult, actualResult);
-
         }
 
         [TestMethod]
         public async Task GetKnittingPostAsync_Test()
         {
-            // Arrange 
+            // Arrange
+            var expectedResult = testInitializeKnittingPost;
 
-            var testPost = expectedResult;
-
-            // Act 
-            var actualResult = await knittingPostRepository.GetKnittingPostAsync(testPost.Id);
+            // Act
+            var actualResult = await testMethodRepo.GetKnittingPostAsync(testInitializeKnittingPost.Id);
 
             // Assert
             Assert.AreEqual(expectedResult, actualResult);
-
         }
 
         [TestMethod]
         public async Task GetAllKnittingPostsAsync_Test()
         {
-            // Arrange 
-           
-            var testPost = expectedResult;
+            // Arrange
+            List<KnittingPost> expectedResult = new List<KnittingPost>() { testInitializeKnittingPost };
 
-            List<KnittingPost> expectedResultPosts = new List<KnittingPost>() { testPost };
-
-            // Act 
-            var actualResult = await knittingPostRepository.GetAllKnittingPostAsync();
+            // Act
+            var actualResult = await testMethodRepo.GetAllKnittingPostAsync();
 
             // Assert
-            Assert.AreEqual(expectedResultPosts, actualResult);
+            Assert.AreEqual(expectedResult, actualResult);
         }
 
         [TestMethod]
         public async Task DeleteKnittingPostAsync_Test()
         {
-            // Arrange 
+            // Arrange
+            KnittingPost? expectedResult = null;
 
-            var testPost = expectedResult;
-
-            // Act 
-            knittingPostRepository.DeleteKnittingPostAsync(testPost.Id);
+            // Act
+            testMethodRepo.DeleteKnittingPostAsync(testInitializeKnittingPost.Id);
 
             // Assert
-            var actualResult = await knittingPostRepository.GetKnittingPostAsync(testPost.Id);
-            Assert.AreEqual(null, actualResult);
+            var actualResult = await testMethodRepo.GetKnittingPostAsync(testInitializeKnittingPost.Id);
+            Assert.AreEqual(expectedResult, actualResult);
 
-        } 
+        }
 
         public async Task UpdateKnittingPostAsync_Test()
         {
-            // Arrange 
+            // Arrange
+            testInitializeKnittingPost.Title = "edited title";
+            testInitializeKnittingPost.KnittingPostContent.Pictures[0].Path = "~/path/to/editedpicture";
+            testInitializeKnittingPost.KnittingPostContent.Videos[0].Path = "~/path/to/editedvideo";
+            var expectedResult = testInitializeKnittingPost;
 
-            var testPost = expectedResult;
-
-            // Act 
-            knittingPostRepository.UpdateKnittingPostAsync(testPost);
+            // Act
+            testMethodRepo.UpdateKnittingPostAsync(testInitializeKnittingPost);
 
             // Assert
-            var expectedUpdate = new KnittingPost
-            {
-                Title = "Opdateret tekst til opslag",
-                TimeStamp = DateTime.Today,
-                Author = "Jens",
-                Comments = new List<Comment>()
-                {
-                    new Comment
-                    {
-                        Text = "første kommentar",
-                        Writer = "jens fjende",
-                        TimeStamp = DateTime.Today
-                    }
-                },
-                KnittingPostContent = new Content
-                {
-                    Pictures = new List<ContentPicture>()
-                    {
-                        new ContentPicture
-                        {
-                            Path = "~/path/to/picture"
-
-                        }
-
-
-                    },
-                    Videos = new List<ContentVideo>()
-                    {
-                        new ContentVideo
-                        {
-                            Path = "~/path/to/video"
-
-                        }
-                    }
-
-
-                }
-            };
-
-            Assert.AreEqual(expectedUpdate, testPost);
+            var actualResult = await testMethodRepo.GetKnittingPostAsync(testInitializeKnittingPost.Id);
+            Assert.AreEqual(expectedResult, actualResult);
         }
     }
 
-    
+
 }
