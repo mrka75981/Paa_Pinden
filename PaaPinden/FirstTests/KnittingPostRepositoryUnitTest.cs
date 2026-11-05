@@ -21,15 +21,6 @@ namespace Tests
                 Title = "test opslag",
                 TimeStamp = DateTime.Today,
                 Author = "Jens",
-                Comments = new List<Comment>()
-                {
-                    new Comment
-                    {
-                        Text = "test opslags kommentar",
-                        Writer = "jens fjende",
-                        TimeStamp = DateTime.Today
-                    }
-                },
                 KnittingPostContent = new Content
                 {
                     Pictures = new List<ContentPicture>()
