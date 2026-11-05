@@ -7,7 +7,7 @@ namespace FirstTests
     public sealed class UnitTest
     {
         [TestMethod]
-        public void CreateKnittingPostAsync_Test()
+        public async Task CreateKnittingPostAsync_Test()
         {
 
 
@@ -61,9 +61,9 @@ namespace FirstTests
 
             // Act 
             
-            var actualResult = await knittingPostRepository.CreateKnittingPostAsync(testPost);
+            await knittingPostRepository.CreateKnittingPostAsync(testPost);
 
-            
+            var actualResult = await knittingPostRepository.GetKnittingPostAsync(testPost.Id);
             
 
             // Assert
