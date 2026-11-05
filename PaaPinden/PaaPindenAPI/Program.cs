@@ -3,6 +3,7 @@ using PaaPindenAPI.Data;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using PaaPindenAPI.Repositories;
 
 namespace PaaPindenAPI
 {
@@ -15,6 +16,9 @@ namespace PaaPindenAPI
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+            builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+            builder.Services.AddScoped<IKnittingPostRepository, KnittingPostRepository>();
 
             builder.Services.AddDbContext<PaaPindenContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("default")));
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
