@@ -120,13 +120,14 @@ namespace Tests
         public async Task DeleteKnittingPostAsync_Test()
         {
             // Arrange
+            int testInitializeKnittingPostId = testInitializeKnittingPost.Id;
             KnittingPost? expectedResult = null;
 
             // Act
             testMethodRepo.DeleteKnittingPostAsync(testInitializeKnittingPost.Id);
 
             // Assert
-            var actualResult = await testMethodRepo.GetKnittingPostAsync(testInitializeKnittingPost.Id);
+            var actualResult = await testMethodRepo.GetKnittingPostAsync(testInitializeKnittingPostId);
             Assert.AreEqual(expectedResult, actualResult);
 
         }
