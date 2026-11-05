@@ -6,14 +6,14 @@ namespace FirstTests
     [TestClass]
     public sealed class UnitTest
     {
-        [TestMethod]
-        public async Task CreateKnittingPostAsync_Test()
+        KnittingPostRepository knittingPostRepository;
+
+        CommentRepository commentRepository;
+
+        KnittingPost expectedResult;
+
+        private async void Init()
         {
-
-
-
-            // Arange 
-
             KnittingPostRepository knittingPostRepository = new KnittingPostRepository();
 
             CommentRepository commentRepository = new CommentRepository();
@@ -56,6 +56,18 @@ namespace FirstTests
 
                 }
             };
+        }
+        [TestMethod]
+        public async Task CreateKnittingPostAsync_Test()
+        {
+
+
+
+            // Arange 
+
+
+            Init();
+            
 
             var testPost = expectedResult;
 
@@ -63,11 +75,12 @@ namespace FirstTests
             
             await knittingPostRepository.CreateKnittingPostAsync(testPost);
 
-            var actualResult = await knittingPostRepository.GetKnittingPostAsync(testPost.Id);
-            
+
+
 
             // Assert
 
+            var actualResult = await knittingPostRepository.GetKnittingPostAsync(testPost.Id);
             Assert.AreEqual(expectedResult, actualResult);
 
         }
