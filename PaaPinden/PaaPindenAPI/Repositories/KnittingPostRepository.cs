@@ -4,27 +4,27 @@ namespace PaaPindenAPI.Repositories
 {
     public class KnittingPostRepository : IKnittingPostRepository
     {
-        public void CreateKnittingPostAsync(KnittingPost knittingPost)
+        public Task CreateKnittingPostAsync(KnittingPost knittingPost)
         {
             throw new NotImplementedException();
         }
 
-        public void DeleteKnittingPostAsync(int id)
+        public Task DeleteKnittingPostAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public List<KnittingPost> GetAllKnittingPostAsync()
+        public Task<List<KnittingPost>> GetAllKnittingPostAsync()
         {
             throw new NotImplementedException();
         }
 
-        public KnittingPost GetKnittingPostAsync(int id)
+        public Task<KnittingPost> GetKnittingPostAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateKnittingPostAsync(KnittingPost knittingPost)
+        public Task UpdateKnittingPostAsync(KnittingPost knittingPost)
         {
             throw new NotImplementedException();
         }
