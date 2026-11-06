@@ -69,7 +69,7 @@ namespace Tests
         [TestMethod]
         public async Task CreateCommentAsync_Test(Comment comment)
         {
-            // Arange
+            // Arrange
             var expectedResult = testMethodComment;
 
             // Act
@@ -84,7 +84,7 @@ namespace Tests
         [TestMethod]
         public async Task UpdateCommentAsync_Test(int id)
         {
-            // Arange
+            // Arrange
             testInitializeComment.Text = "ændret kommentar";
             var expectedResult = testInitializeComment;
 
@@ -100,7 +100,7 @@ namespace Tests
         [TestMethod]
         public async Task GetAllPostCommentsAsync_Test(int id)
         {
-            // Arange
+            // Arrange
             List<Comment> expectedResult = new List<Comment>() { testInitializeComment };
 
             // Act
@@ -113,7 +113,7 @@ namespace Tests
         [TestMethod]
         public async Task DeleteCommentAsync_Test(int id)
         {
-            // Arange
+            // Arrange
             int testInitializeCommentCommentKnittingPostId = testInitializeComment.CommentKnittingPost.Id;
             Comment? expectedResult = null;
 

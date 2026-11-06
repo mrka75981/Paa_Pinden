@@ -6,6 +6,7 @@ namespace Tests
     [TestClass]
     public sealed class KnittingPostRepositoryUnitTest
     {
+       
         IKnittingPostRepository? testMethodRepo;
         IKnittingPostRepository? testInitializeRepo;
         KnittingPost? testMethodKnittingPost;
@@ -79,7 +80,7 @@ namespace Tests
         [TestMethod]
         public async Task CreateKnittingPostAsync_Test()
         {
-            // Arange
+            // Arrange
             var expectedResult = testMethodKnittingPost;
 
             // Act
@@ -124,7 +125,7 @@ namespace Tests
             KnittingPost? expectedResult = null;
 
             // Act
-            testMethodRepo.DeleteKnittingPostAsync(testInitializeKnittingPost.Id);
+            await testMethodRepo.DeleteKnittingPostAsync(testInitializeKnittingPost.Id);
 
             // Assert
             var actualResult = await testMethodRepo.GetKnittingPostAsync(testInitializeKnittingPostId);
@@ -141,7 +142,7 @@ namespace Tests
             var expectedResult = testInitializeKnittingPost;
 
             // Act
-            testMethodRepo.UpdateKnittingPostAsync(testInitializeKnittingPost);
+            await testMethodRepo.UpdateKnittingPostAsync(testInitializeKnittingPost);
 
             // Assert
             var actualResult = await testMethodRepo.GetKnittingPostAsync(testInitializeKnittingPost.Id);
