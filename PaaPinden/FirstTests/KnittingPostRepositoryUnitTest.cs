@@ -76,6 +76,7 @@ namespace Tests
 
             paaPindenContext.Database.EnsureDeleted();
             paaPindenContext.Database.EnsureCreated();
+            paaPindenContext.KnittingPosts.RemoveRange(paaPindenContext.KnittingPosts.AsNoTracking());
 
             paaPindenContext.AddRange(testInitializeKnittingPost);
             paaPindenContext.SaveChanges();
@@ -93,7 +94,6 @@ namespace Tests
             await testMethodRepo.CreateKnittingPostAsync(testMethodKnittingPost);
 
             // Assert
-            //find actualResult the board with paapindencontext
 
             var actualResult = paaPindenContext.KnittingPosts.Where( kp => kp.Id == testMethodKnittingPost.Id).FirstOrDefault();
             Assert.AreEqual(expectedResult, actualResult);
