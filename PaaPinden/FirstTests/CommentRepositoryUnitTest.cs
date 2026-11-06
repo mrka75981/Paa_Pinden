@@ -1,4 +1,6 @@
-﻿using PaaPindenAPI.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PaaPindenAPI.Data;
+using PaaPindenAPI.Models;
 using PaaPindenAPI.Repositories;
 using System;
 using System.Collections.Generic;
@@ -9,6 +11,8 @@ namespace Tests
     [TestClass]
     public sealed class CommentRepositoryUnitTest
     {
+        PaaPindenContext paaPindenContext = new PaaPindenContext(new DbContextOptionsBuilder<PaaPindenContext>()
+            .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=PaaPindenDb;Integrated Security=true;Encrypt=true;Trust Server Certificate=True").Options);
         KnittingPost? testInitializeKnittingPost;
         ICommentRepository? testMethodCommentRepo;
         Comment? testMethodComment;
