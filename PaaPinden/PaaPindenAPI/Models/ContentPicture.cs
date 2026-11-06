@@ -2,8 +2,7 @@
 {
     public class ContentPicture
     {
-        public int ContentId { get; set; }
-
         public string Path { get; set; }
+        public int ContentId { get; set; }
     }
 }

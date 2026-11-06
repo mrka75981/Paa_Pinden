@@ -1,4 +1,9 @@
 
+using PaaPindenAPI.Data;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+
 namespace PaaPindenAPI
 {
     public class Program
@@ -10,6 +15,8 @@ namespace PaaPindenAPI
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+            builder.Services.AddDbContext<PaaPindenContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("default")));
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
