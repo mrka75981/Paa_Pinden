@@ -14,12 +14,12 @@ namespace PaaPindenAPI.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<List<Comment>> GetAllPostCommentsAsync(int id)
+        public Task<List<Comment>> GetAllPostCommentsAsync(int knittingPostId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Comment> UpdateCommentAsync(Comment comment, int id)
+        public Task<Comment> UpdateCommentAsync(Comment comment)
         {
             throw new NotImplementedException();
         }

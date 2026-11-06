@@ -93,7 +93,7 @@ namespace Tests
             var expectedResult = testInitializeComment;
 
             // Act
-            await testMethodCommentRepo.UpdateCommentAsync(testInitializeComment, testInitializeComment.Id);
+            await testMethodCommentRepo.UpdateCommentAsync(testInitializeComment);
 
             // Assert
             var actualResult = paaPindenContext.Comments.Where(c => c.Id == testInitializeComment.Id).FirstOrDefault();
