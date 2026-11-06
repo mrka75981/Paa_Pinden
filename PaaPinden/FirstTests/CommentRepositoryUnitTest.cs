@@ -1,26 +1,27 @@
-﻿using PaaPindenAPI.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PaaPindenAPI.Data;
+using PaaPindenAPI.Models;
 using PaaPindenAPI.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Tests
 {
     [TestClass]
     public sealed class CommentRepositoryUnitTest
     {
-        IKnittingPostRepository? testInitializeKnittingPostRepo;
+        PaaPindenContext? paaPindenContext;
         KnittingPost? testInitializeKnittingPost;
         ICommentRepository? testMethodCommentRepo;
-        ICommentRepository? testInitializeCommentRepo;
         Comment? testMethodComment;
         Comment? testInitializeComment;
 
         [TestInitialize]
         public async Task Init()
         {
-            testInitializeKnittingPostRepo = new KnittingPostRepository();
+            paaPindenContext = new PaaPindenContext(new DbContextOptionsBuilder<PaaPindenContext>()
+                .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=PaaPindenDb;Integrated Security=true;Encrypt=true;Trust Server Certificate=True").Options);
             testInitializeKnittingPost = new KnittingPost
             {
                 Title = "Første opslag",
@@ -45,7 +46,6 @@ namespace Tests
                 }
             };
             testMethodCommentRepo = new CommentRepository();
-            testInitializeCommentRepo = new CommentRepository();
             testMethodComment = new Comment()
             {
                 CommentKnittingPost = testInitializeKnittingPost,
@@ -61,9 +61,14 @@ namespace Tests
                 TimeStamp = DateTime.Today
             };
 
-            //await testInitializeRepo.DeleteAllKnittingPostsAsync();
-            await testInitializeKnittingPostRepo.CreateKnittingPostAsync(testInitializeKnittingPost);
-            await testInitializeCommentRepo.CreateCommentAsync(testInitializeComment);
+            paaPindenContext.Database.EnsureDeleted();
+            paaPindenContext.Database.EnsureCreated();
+            paaPindenContext.KnittingPosts.RemoveRange(paaPindenContext.KnittingPosts.AsNoTracking());
+            paaPindenContext.SaveChanges();
+            paaPindenContext.KnittingPosts.Add(testInitializeKnittingPost);
+            paaPindenContext.SaveChanges();
+            paaPindenContext.Comments.Add(testInitializeComment);
+            paaPindenContext.SaveChanges();
         }
 
         [TestMethod]
@@ -76,8 +81,7 @@ namespace Tests
             await testMethodCommentRepo.CreateCommentAsync(testMethodComment);
 
             // Assert
-            var actualResultList = await testMethodCommentRepo.GetAllPostCommentsAsync(testMethodComment.CommentKnittingPost.Id);
-            var actualResult = actualResultList.First();
+            var actualResult = paaPindenContext.Comments.Where(c => c.Id == testMethodComment.Id).FirstOrDefault();
             Assert.AreEqual(expectedResult, actualResult);
         }
 
@@ -89,11 +93,10 @@ namespace Tests
             var expectedResult = testInitializeComment;
 
             // Act
-            await testMethodCommentRepo.UpdateCommentAsync(testInitializeComment, testInitializeComment.Id);
+            await testMethodCommentRepo.UpdateCommentAsync(testInitializeComment);
 
             // Assert
-            var actualResultList = await testMethodCommentRepo.GetAllPostCommentsAsync(testInitializeComment.CommentKnittingPost.Id);
-            var actualResult = actualResultList.First();
+            var actualResult = paaPindenContext.Comments.Where(c => c.Id == testInitializeComment.Id).FirstOrDefault();
             Assert.AreEqual(expectedResult, actualResult);
         }
 
@@ -114,23 +117,14 @@ namespace Tests
         public async Task DeleteCommentAsync_Test(int id)
         {
             // Arrange
-            int testInitializeCommentCommentKnittingPostId = testInitializeComment.CommentKnittingPost.Id;
+            int testInitializeCommentId = testInitializeComment.Id;
             Comment? expectedResult = null;
 
             // Act
             await testMethodCommentRepo.DeleteCommentAsync(testInitializeComment.Id);
 
             // Assert
-            List<Comment> actualResultList = await testMethodCommentRepo.GetAllPostCommentsAsync(testInitializeCommentCommentKnittingPostId);
-            Comment? actualResult;
-            if (actualResultList.Count == 0)
-            {
-                actualResult = null;
-            }
-            else
-            {
-                actualResult = actualResultList.First();
-            }
+            var actualResult = paaPindenContext.Comments.Where(c => c.Id == testInitializeCommentId).FirstOrDefault(); //FirstOrDefault surely returns null if the list is empty
             Assert.AreEqual(expectedResult, actualResult);
         }
     }
