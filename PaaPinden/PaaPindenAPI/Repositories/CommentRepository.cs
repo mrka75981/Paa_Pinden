@@ -19,7 +19,7 @@ namespace PaaPindenAPI.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Comment> UpdateCommentAsync(int id)
+        public Task<Comment> UpdateCommentAsync(Comment comment, int id)
         {
             throw new NotImplementedException();
         }

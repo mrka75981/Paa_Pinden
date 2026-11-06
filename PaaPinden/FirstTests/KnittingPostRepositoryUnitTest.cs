@@ -74,7 +74,13 @@ namespace Tests
                 }
             };
 
-            //reset the board with paapindencontext
+            paaPindenContext.Database.EnsureDeleted();
+            paaPindenContext.Database.EnsureCreated();
+
+            paaPindenContext.AddRange(testInitializeKnittingPost);
+            paaPindenContext.SaveChanges();
+
+
         }
 
         [TestMethod]
@@ -88,6 +94,8 @@ namespace Tests
 
             // Assert
             //find actualResult the board with paapindencontext
+
+            var actualResult = paaPindenContext.KnittingPosts.Where( kp => kp.Id == testMethodKnittingPost.Id).FirstOrDefault();
             Assert.AreEqual(expectedResult, actualResult);
         }
 
@@ -128,7 +136,7 @@ namespace Tests
             await testMethodRepo.DeleteKnittingPostAsync(testInitializeKnittingPost.Id);
 
             // Assert
-            //find actualResult the board with paapindencontext
+            var actualResult = paaPindenContext.KnittingPosts.Where(kp => kp.Id == testInitializeKnittingPost.Id).FirstOrDefault();
             Assert.AreEqual(expectedResult, actualResult);
 
         }
@@ -145,7 +153,7 @@ namespace Tests
             await testMethodRepo.UpdateKnittingPostAsync(testInitializeKnittingPost);
 
             // Assert
-            //find actualResult the board with paapindencontext
+            var actualResult = paaPindenContext.KnittingPosts.Where(kp => kp.Id == testInitializeKnittingPost.Id).FirstOrDefault();
             Assert.AreEqual(expectedResult, actualResult);
         }
     }
