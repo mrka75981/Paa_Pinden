@@ -3,24 +3,20 @@ using PaaPindenAPI.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Tests
 {
     [TestClass]
     public sealed class CommentRepositoryUnitTest
     {
-        IKnittingPostRepository? testInitializeKnittingPostRepo;
         KnittingPost? testInitializeKnittingPost;
         ICommentRepository? testMethodCommentRepo;
-        ICommentRepository? testInitializeCommentRepo;
         Comment? testMethodComment;
         Comment? testInitializeComment;
 
         [TestInitialize]
         public async Task Init()
         {
-            testInitializeKnittingPostRepo = new KnittingPostRepository();
             testInitializeKnittingPost = new KnittingPost
             {
                 Title = "Første opslag",
@@ -45,7 +41,6 @@ namespace Tests
                 }
             };
             testMethodCommentRepo = new CommentRepository();
-            testInitializeCommentRepo = new CommentRepository();
             testMethodComment = new Comment()
             {
                 CommentKnittingPost = testInitializeKnittingPost,
@@ -61,9 +56,7 @@ namespace Tests
                 TimeStamp = DateTime.Today
             };
 
-            //await testInitializeRepo.DeleteAllKnittingPostsAsync();
-            await testInitializeKnittingPostRepo.CreateKnittingPostAsync(testInitializeKnittingPost);
-            await testInitializeCommentRepo.CreateCommentAsync(testInitializeComment);
+            //reset the board with paapindencontext
         }
 
         [TestMethod]
@@ -76,8 +69,7 @@ namespace Tests
             await testMethodCommentRepo.CreateCommentAsync(testMethodComment);
 
             // Assert
-            var actualResultList = await testMethodCommentRepo.GetAllPostCommentsAsync(testMethodComment.CommentKnittingPost.Id);
-            var actualResult = actualResultList.First();
+            //find actualResult the board with paapindencontext
             Assert.AreEqual(expectedResult, actualResult);
         }
 
@@ -92,8 +84,7 @@ namespace Tests
             await testMethodCommentRepo.UpdateCommentAsync(testInitializeComment, testInitializeComment.Id);
 
             // Assert
-            var actualResultList = await testMethodCommentRepo.GetAllPostCommentsAsync(testInitializeComment.CommentKnittingPost.Id);
-            var actualResult = actualResultList.First();
+            //find actualResult the board with paapindencontext
             Assert.AreEqual(expectedResult, actualResult);
         }
 
@@ -121,16 +112,7 @@ namespace Tests
             await testMethodCommentRepo.DeleteCommentAsync(testInitializeComment.Id);
 
             // Assert
-            List<Comment> actualResultList = await testMethodCommentRepo.GetAllPostCommentsAsync(testInitializeCommentCommentKnittingPostId);
-            Comment? actualResult;
-            if (actualResultList.Count == 0)
-            {
-                actualResult = null;
-            }
-            else
-            {
-                actualResult = actualResultList.First();
-            }
+            //find actualResult the board with paapindencontext
             Assert.AreEqual(expectedResult, actualResult);
         }
     }

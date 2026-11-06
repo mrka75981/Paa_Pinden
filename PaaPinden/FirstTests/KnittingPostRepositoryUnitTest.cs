@@ -8,7 +8,6 @@ namespace Tests
     {
        
         IKnittingPostRepository? testMethodRepo;
-        IKnittingPostRepository? testInitializeRepo;
         KnittingPost? testMethodKnittingPost;
         KnittingPost? testInitializeKnittingPost;
 
@@ -16,7 +15,6 @@ namespace Tests
         public async Task Init()
         {
             testMethodRepo = new KnittingPostRepository();
-            testInitializeRepo = new KnittingPostRepository();
             testMethodKnittingPost = new KnittingPost
             {
                 Title = "test opslag",
@@ -73,8 +71,7 @@ namespace Tests
                 }
             };
 
-            //await testInitializeRepo.DeleteAllKnittingPostsAsync();
-            await testInitializeRepo.CreateKnittingPostAsync(testInitializeKnittingPost);
+            //reset the board with paapindencontext
         }
 
         [TestMethod]
@@ -87,7 +84,7 @@ namespace Tests
             await testMethodRepo.CreateKnittingPostAsync(testMethodKnittingPost);
 
             // Assert
-            var actualResult = await testMethodRepo.GetKnittingPostAsync(testMethodKnittingPost.Id);
+            //find actualResult the board with paapindencontext
             Assert.AreEqual(expectedResult, actualResult);
         }
 
@@ -128,7 +125,7 @@ namespace Tests
             await testMethodRepo.DeleteKnittingPostAsync(testInitializeKnittingPost.Id);
 
             // Assert
-            var actualResult = await testMethodRepo.GetKnittingPostAsync(testInitializeKnittingPostId);
+            //find actualResult the board with paapindencontext
             Assert.AreEqual(expectedResult, actualResult);
 
         }
@@ -145,7 +142,7 @@ namespace Tests
             await testMethodRepo.UpdateKnittingPostAsync(testInitializeKnittingPost);
 
             // Assert
-            var actualResult = await testMethodRepo.GetKnittingPostAsync(testInitializeKnittingPost.Id);
+            //find actualResult the board with paapindencontext
             Assert.AreEqual(expectedResult, actualResult);
         }
     }
