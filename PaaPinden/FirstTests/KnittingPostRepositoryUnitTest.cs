@@ -8,8 +8,7 @@ namespace Tests
     [TestClass]
     public sealed class KnittingPostRepositoryUnitTest
     {
-        PaaPindenContext paaPindenContext = new PaaPindenContext(new DbContextOptionsBuilder<PaaPindenContext>()
-            .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=PaaPindenDb;Integrated Security=true;Encrypt=true;Trust Server Certificate=True").Options);
+        PaaPindenContext? paaPindenContext;
         IKnittingPostRepository? testMethodRepo;
         KnittingPost? testMethodKnittingPost;
         KnittingPost? testInitializeKnittingPost;
@@ -17,6 +16,8 @@ namespace Tests
         [TestInitialize]
         public async Task Init()
         {
+            paaPindenContext = new PaaPindenContext(new DbContextOptionsBuilder<PaaPindenContext>()
+                .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=PaaPindenDb;Integrated Security=true;Encrypt=true;Trust Server Certificate=True").Options);
             testMethodRepo = new KnittingPostRepository();
             testMethodKnittingPost = new KnittingPost
             {
@@ -77,11 +78,9 @@ namespace Tests
             paaPindenContext.Database.EnsureDeleted();
             paaPindenContext.Database.EnsureCreated();
             paaPindenContext.KnittingPosts.RemoveRange(paaPindenContext.KnittingPosts.AsNoTracking());
-
-            paaPindenContext.AddRange(testInitializeKnittingPost);
             paaPindenContext.SaveChanges();
-
-
+            paaPindenContext.KnittingPosts.Add(testInitializeKnittingPost);
+            paaPindenContext.SaveChanges();
         }
 
         [TestMethod]
@@ -94,7 +93,6 @@ namespace Tests
             await testMethodRepo.CreateKnittingPostAsync(testMethodKnittingPost);
 
             // Assert
-
             var actualResult = paaPindenContext.KnittingPosts.Where( kp => kp.Id == testMethodKnittingPost.Id).FirstOrDefault();
             Assert.AreEqual(expectedResult, actualResult);
         }
@@ -136,7 +134,7 @@ namespace Tests
             await testMethodRepo.DeleteKnittingPostAsync(testInitializeKnittingPost.Id);
 
             // Assert
-            var actualResult = paaPindenContext.KnittingPosts.Where(kp => kp.Id == testInitializeKnittingPost.Id).FirstOrDefault();
+            var actualResult = paaPindenContext.KnittingPosts.Where(kp => kp.Id == testInitializeKnittingPostId).FirstOrDefault(); //FirstOrDefault surely returns null if the list is empty
             Assert.AreEqual(expectedResult, actualResult);
 
         }
