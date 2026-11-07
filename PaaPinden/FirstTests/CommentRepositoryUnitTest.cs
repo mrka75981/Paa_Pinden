@@ -11,7 +11,8 @@ namespace Tests
     [TestClass]
     public sealed class CommentRepositoryUnitTest
     {
-        PaaPindenContext? paaPindenContext;
+        PaaPindenContext? paaPindenContextForRepo;
+        PaaPindenContext? paaPindenContextForInit;
         KnittingPost? testInitializeKnittingPost;
         ICommentRepository? testMethodCommentRepo;
         Comment? testMethodComment;
@@ -20,7 +21,9 @@ namespace Tests
         [TestInitialize]
         public async Task Init()
         {
-            paaPindenContext = new PaaPindenContext(new DbContextOptionsBuilder<PaaPindenContext>()
+            paaPindenContextForRepo = new PaaPindenContext(new DbContextOptionsBuilder<PaaPindenContext>()
+                .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=PaaPindenDb;Integrated Security=true;Encrypt=true;Trust Server Certificate=True").Options);
+            paaPindenContextForInit = new PaaPindenContext(new DbContextOptionsBuilder<PaaPindenContext>()
                 .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=PaaPindenDb;Integrated Security=true;Encrypt=true;Trust Server Certificate=True").Options);
             testInitializeKnittingPost = new KnittingPost
             {
@@ -45,7 +48,7 @@ namespace Tests
                     }
                 }
             };
-            testMethodCommentRepo = new CommentRepository();
+            testMethodCommentRepo = new CommentRepository(paaPindenContextForRepo);
             testMethodComment = new Comment()
             {
                 CommentKnittingPost = testInitializeKnittingPost,
@@ -61,14 +64,14 @@ namespace Tests
                 TimeStamp = DateTime.Today
             };
 
-            paaPindenContext.Database.EnsureDeleted();
-            paaPindenContext.Database.EnsureCreated();
-            paaPindenContext.KnittingPosts.RemoveRange(paaPindenContext.KnittingPosts.AsNoTracking());
-            paaPindenContext.SaveChanges();
-            paaPindenContext.KnittingPosts.Add(testInitializeKnittingPost);
-            paaPindenContext.SaveChanges();
-            paaPindenContext.Comments.Add(testInitializeComment);
-            paaPindenContext.SaveChanges();
+            paaPindenContextForInit.Database.EnsureDeleted();
+            paaPindenContextForInit.Database.EnsureCreated();
+            paaPindenContextForInit.KnittingPosts.RemoveRange(paaPindenContextForRepo.KnittingPosts.AsNoTracking());
+            paaPindenContextForInit.SaveChanges();
+            paaPindenContextForInit.KnittingPosts.Add(testInitializeKnittingPost);
+            paaPindenContextForInit.SaveChanges();
+            paaPindenContextForInit.Comments.Add(testInitializeComment);
+            paaPindenContextForInit.SaveChanges();
         }
 
         [TestMethod]
@@ -81,7 +84,7 @@ namespace Tests
             await testMethodCommentRepo.CreateCommentAsync(testMethodComment);
 
             // Assert
-            var actualResult = paaPindenContext.Comments.Where(c => c.Id == testMethodComment.Id).FirstOrDefault();
+            var actualResult = paaPindenContextForRepo.Comments.Where(c => c.Id == testMethodComment.Id).FirstOrDefault();
             Assert.AreEqual(expectedResult, actualResult);
         }
 
@@ -96,7 +99,7 @@ namespace Tests
             await testMethodCommentRepo.UpdateCommentAsync(testInitializeComment);
 
             // Assert
-            var actualResult = paaPindenContext.Comments.Where(c => c.Id == testInitializeComment.Id).FirstOrDefault();
+            var actualResult = paaPindenContextForRepo.Comments.Where(c => c.Id == testInitializeComment.Id).FirstOrDefault();
             Assert.AreEqual(expectedResult, actualResult);
         }
 
@@ -124,7 +127,7 @@ namespace Tests
             await testMethodCommentRepo.DeleteCommentAsync(testInitializeComment.Id);
 
             // Assert
-            var actualResult = paaPindenContext.Comments.Where(c => c.Id == testInitializeCommentId).FirstOrDefault(); //FirstOrDefault surely returns null if the list is empty
+            var actualResult = paaPindenContextForRepo.Comments.Where(c => c.Id == testInitializeCommentId).FirstOrDefault(); //FirstOrDefault surely returns null if the list is empty
             Assert.AreEqual(expectedResult, actualResult);
         }
     }
