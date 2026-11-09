@@ -12,8 +12,8 @@ using PaaPindenAPI.Data;
 namespace PaaPindenAPI.Migrations
 {
     [DbContext(typeof(PaaPindenContext))]
-    [Migration("20261109135526_Init")]
-    partial class Init
+    [Migration("20261109165635_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

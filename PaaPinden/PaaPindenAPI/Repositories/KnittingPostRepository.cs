@@ -42,7 +42,7 @@ namespace PaaPindenAPI.Repositories
 
         public async Task<KnittingPost> GetKnittingPostAsync(int id)
         {
-            var knittingPost = await _paaPindenContext.KnittingPosts.AsNoTracking()
+            var knittingPost = await _paaPindenContext.KnittingPosts
                 .Include(k => k.Comments)
                 .Include(k => k.KnittingPostContent)
                 .Include(k => k.KnittingPostContent.Videos)
@@ -57,7 +57,8 @@ namespace PaaPindenAPI.Repositories
 
         public async Task UpdateKnittingPostAsync(KnittingPost knittingPost)
         {
-            _paaPindenContext.KnittingPosts.Update(knittingPost);
+            //Not needed anymore cause of tracking <3
+            //_paaPindenContext.KnittingPosts.Update(knittingPost);
 
             await _paaPindenContext.SaveChangesAsync();
         }

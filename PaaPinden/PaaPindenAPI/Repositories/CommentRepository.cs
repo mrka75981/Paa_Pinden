@@ -1,4 +1,5 @@
-﻿using PaaPindenAPI.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using PaaPindenAPI.Data;
 using PaaPindenAPI.Models;
 
 namespace PaaPindenAPI.Repositories
@@ -28,19 +29,26 @@ namespace PaaPindenAPI.Repositories
             }
         }
 
+        public async Task<Comment> GetCommentAsync(int id)
+        {
+            var comment = await _paaPindenContext.Comments.SingleOrDefaultAsync(c => c.Id == id);
+            if (comment == null) return null;
+            return comment;
+        }
+
         public async Task<List<Comment>> GetAllPostCommentsAsync(int id)
         {
-            var knittingPost = await _paaPindenContext.KnittingPosts.FindAsync(id);
-            if (knittingPost != null)
+            var knittingPostComments = await _paaPindenContext.Comments.Where(c => c.CommentKnittingPostId == id).ToListAsync();
+            if (knittingPostComments != null)
             {
-                return knittingPost.Comments;
+                return knittingPostComments;
             }
             return null;
         }
 
         public async Task UpdateCommentAsync(Comment comment)
         {
-            _paaPindenContext.Comments.Update(comment);
+            //_paaPindenContext.Comments.Update(comment);
 
             await _paaPindenContext.SaveChangesAsync();
         }
