@@ -33,13 +33,21 @@ namespace PaaPindenAPI.Repositories
         {
             List<KnittingPost> knittingPosts = await _paaPindenContext.KnittingPosts
                 .Include(k => k.Comments)
-                .Include(k => k.KnittingPostContent).ToListAsync();
+                .Include(k => k.KnittingPostContent)
+                .Include(k => k.KnittingPostContent.Videos)
+                .Include(k => k.KnittingPostContent.Pictures).ToListAsync();
+
             return knittingPosts;
         }
 
         public async Task<KnittingPost> GetKnittingPostAsync(int id)
         {
-            var knittingPost = await _paaPindenContext.KnittingPosts.AsNoTracking().SingleOrDefaultAsync(k => k.Id == id);
+            var knittingPost = await _paaPindenContext.KnittingPosts.AsNoTracking()
+                .Include(k => k.Comments)
+                .Include(k => k.KnittingPostContent)
+                .Include(k => k.KnittingPostContent.Videos)
+                .Include(k => k.KnittingPostContent.Pictures)
+                .SingleOrDefaultAsync(k => k.Id == id);
             if (knittingPost != null)
             {
                 return knittingPost;

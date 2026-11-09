@@ -70,7 +70,6 @@ namespace PaaPindenAPI.Controllers
             {
                 Author = knittingPostDTO.Author,
                 KnittingPostContent = knittingPostDTO.KnittingPostContent,
-                TimeStamp = knittingPostDTO.TimeStamp,
                 Title = knittingPostDTO.Title,
                 Comments = null,
                 Id = knittingPostDTO.Id
