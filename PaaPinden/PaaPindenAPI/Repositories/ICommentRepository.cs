@@ -5,8 +5,8 @@ namespace PaaPindenAPI.Repositories
     public interface ICommentRepository
     {
         Task CreateCommentAsync(Comment comment);
-        Task<Comment> UpdateCommentAsync(Comment comment, int id);
-        Task<List<Comment>> GetAllPostCommentsAsync(int id);
+        Task<Comment> UpdateCommentAsync(Comment comment);
+        Task<List<Comment>> GetAllPostCommentsAsync(int knittingPostId);
         Task DeleteCommentAsync(int id);
     }
 }
