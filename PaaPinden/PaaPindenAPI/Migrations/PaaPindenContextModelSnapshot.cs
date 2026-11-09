@@ -25,7 +25,10 @@ namespace PaaPindenAPI.Migrations
             modelBuilder.Entity("PaaPindenAPI.Models.Comment", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CommentKnittingPostId")
                         .HasColumnType("int");
@@ -132,14 +135,8 @@ namespace PaaPindenAPI.Migrations
             modelBuilder.Entity("PaaPindenAPI.Models.Comment", b =>
                 {
                     b.HasOne("PaaPindenAPI.Models.KnittingPost", "CommentKnittingPost")
-                        .WithMany()
-                        .HasForeignKey("CommentKnittingPostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PaaPindenAPI.Models.KnittingPost", null)
                         .WithMany("Comments")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("CommentKnittingPostId")
                         .IsRequired();
 
                     b.Navigation("CommentKnittingPost");

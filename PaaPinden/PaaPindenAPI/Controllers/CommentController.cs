@@ -1,36 +1,76 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PaaPindenAPI.DTOs;
+using PaaPindenAPI.Models;
 using PaaPindenAPI.Repositories;
 
 namespace PaaPindenAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CommentController
+    public class CommentController : ControllerBase
     {
+        private readonly ICommentRepository _commentRepository;
         private readonly IKnittingPostRepository _knittingPostRepository;
 
-        public Task<IActionResult> CreateKnittingPost()
+        public CommentController(ICommentRepository commentRepository, IKnittingPostRepository knittingPostRepository)
         {
-
+            _commentRepository = commentRepository;
+            _knittingPostRepository = knittingPostRepository;
         }
 
-        public Task<IActionResult> GetKnittingPostAsync()
+        [HttpPost]
+        public async Task<IActionResult> CreateCommentAsync(CommentDTO commentDTO)
         {
+            if (commentDTO == null)
+                return BadRequest();
 
+            var knittingPost = await _knittingPostRepository.GetKnittingPostAsync(commentDTO.CommentKnittingPostId);
+            if (knittingPost == null)
+            {
+                return BadRequest();
+            }
+
+            Comment comment = new Comment()
+            {
+                TimeStamp = commentDTO.TimeStamp,
+                Text = commentDTO.Text,
+                Writer = commentDTO.Writer,
+                CommentKnittingPostId = commentDTO.CommentKnittingPostId
+            };
+
+            await _commentRepository.CreateCommentAsync(comment);
+            return Ok();
         }
 
-        public Task<IActionResult> GetAllKnittingPostAsync()
+        [HttpPut]
+        public async Task<IActionResult> UpdateCommentAsync(CommentDTO commentDTO)
         {
+            if (commentDTO == null || commentDTO.Id <= 0)
+                return BadRequest();
 
+            Comment comment = new Comment()
+            {
+                Id = commentDTO.Id,
+                TimeStamp = commentDTO.TimeStamp,
+                Text = commentDTO.Text,
+                Writer = commentDTO.Writer,
+                CommentKnittingPostId = commentDTO.CommentKnittingPostId
+            };
+
+            await _commentRepository.UpdateCommentAsync(comment);
+            return Ok();
         }
 
-        public Task<IActionResult> UpdateKnittingPostAsync()
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCommentAsync(int id)
         {
+            if (id <= 0)
+                return BadRequest();
+            //if (await _commentRepository(id) == null)
+            //    return NotFound();
 
-        }
-        public Task<IActionResult> DeleteKnittingPostAsync()
-        {
-
+            await _commentRepository.DeleteCommentAsync(id);
+            return Ok();
         }
     }
 }

@@ -39,7 +39,7 @@ namespace PaaPindenAPI.Repositories
 
         public async Task<KnittingPost> GetKnittingPostAsync(int id)
         {
-            var knittingPost = await _paaPindenContext.KnittingPosts.FindAsync(id);
+            var knittingPost = await _paaPindenContext.KnittingPosts.AsNoTracking().SingleOrDefaultAsync(k => k.Id == id);
             if (knittingPost != null)
             {
                 return knittingPost;

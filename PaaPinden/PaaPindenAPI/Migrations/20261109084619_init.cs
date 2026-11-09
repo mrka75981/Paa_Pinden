@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PaaPindenAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +15,8 @@ namespace PaaPindenAPI.Migrations
                 name: "Comments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     CommentKnittingPostId = table.Column<int>(type: "int", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Writer = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -121,14 +122,6 @@ namespace PaaPindenAPI.Migrations
                 name: "FK_Comments_KnittingPosts_CommentKnittingPostId",
                 table: "Comments",
                 column: "CommentKnittingPostId",
-                principalTable: "KnittingPosts",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Comments_KnittingPosts_Id",
-                table: "Comments",
-                column: "Id",
                 principalTable: "KnittingPosts",
                 principalColumn: "Id");
 

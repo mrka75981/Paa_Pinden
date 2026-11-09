@@ -1,9 +1,9 @@
 
-using PaaPindenAPI.Data;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using PaaPindenAPI.Data;
 using PaaPindenAPI.Repositories;
+using Scalar.AspNetCore;
 
 namespace PaaPindenAPI
 {
@@ -30,6 +30,7 @@ namespace PaaPindenAPI
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
+                app.MapScalarApiReference();
             }
 
             app.UseHttpsRedirection();
