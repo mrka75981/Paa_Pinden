@@ -158,6 +158,4 @@ namespace Tests
             Assert.AreEqual(expectedResult, actualResult);
         }
     }
-
-
 }
