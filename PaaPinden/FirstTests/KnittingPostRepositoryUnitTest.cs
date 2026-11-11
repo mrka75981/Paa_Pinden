@@ -1,4 +1,6 @@
-﻿using PaaPindenAPI.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PaaPindenAPI.Data;
+using PaaPindenAPI.Models;
 using PaaPindenAPI.Repositories;
 
 namespace Tests
@@ -6,17 +8,20 @@ namespace Tests
     [TestClass]
     public sealed class KnittingPostRepositoryUnitTest
     {
-       
+        PaaPindenContext? paaPindenContextForRepo;
+        PaaPindenContext? paaPindenContextForInit;
         IKnittingPostRepository? testMethodRepo;
-        IKnittingPostRepository? testInitializeRepo;
         KnittingPost? testMethodKnittingPost;
         KnittingPost? testInitializeKnittingPost;
 
         [TestInitialize]
         public async Task Init()
         {
-            testMethodRepo = new KnittingPostRepository();
-            testInitializeRepo = new KnittingPostRepository();
+            paaPindenContextForRepo = new PaaPindenContext(new DbContextOptionsBuilder<PaaPindenContext>()
+                .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=PaaPindenDb;Integrated Security=true;Encrypt=true;Trust Server Certificate=True").Options);
+            paaPindenContextForInit = new PaaPindenContext(new DbContextOptionsBuilder<PaaPindenContext>()
+                .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=PaaPindenDb;Integrated Security=true;Encrypt=true;Trust Server Certificate=True").Options);
+            testMethodRepo = new KnittingPostRepository(paaPindenContextForRepo);
             testMethodKnittingPost = new KnittingPost
             {
                 Title = "test opslag",
@@ -73,8 +78,12 @@ namespace Tests
                 }
             };
 
-            //await testInitializeRepo.DeleteAllKnittingPostsAsync();
-            await testInitializeRepo.CreateKnittingPostAsync(testInitializeKnittingPost);
+            paaPindenContextForInit.Database.EnsureDeleted();
+            paaPindenContextForInit.Database.EnsureCreated();
+            paaPindenContextForInit.KnittingPosts.RemoveRange(paaPindenContextForInit.KnittingPosts.AsNoTracking());
+            paaPindenContextForInit.SaveChanges();
+            paaPindenContextForInit.KnittingPosts.Add(testInitializeKnittingPost);
+            paaPindenContextForInit.SaveChanges();
         }
 
         [TestMethod]
@@ -87,7 +96,7 @@ namespace Tests
             await testMethodRepo.CreateKnittingPostAsync(testMethodKnittingPost);
 
             // Assert
-            var actualResult = await testMethodRepo.GetKnittingPostAsync(testMethodKnittingPost.Id);
+            var actualResult = paaPindenContextForInit.KnittingPosts.Where( kp => kp.Id == testMethodKnittingPost.Id).FirstOrDefault();
             Assert.AreEqual(expectedResult, actualResult);
         }
 
@@ -128,7 +137,7 @@ namespace Tests
             await testMethodRepo.DeleteKnittingPostAsync(testInitializeKnittingPost.Id);
 
             // Assert
-            var actualResult = await testMethodRepo.GetKnittingPostAsync(testInitializeKnittingPostId);
+            var actualResult = paaPindenContextForInit.KnittingPosts.Where(kp => kp.Id == testInitializeKnittingPostId).FirstOrDefault(); //FirstOrDefault surely returns null if the list is empty
             Assert.AreEqual(expectedResult, actualResult);
 
         }
@@ -145,10 +154,8 @@ namespace Tests
             await testMethodRepo.UpdateKnittingPostAsync(testInitializeKnittingPost);
 
             // Assert
-            var actualResult = await testMethodRepo.GetKnittingPostAsync(testInitializeKnittingPost.Id);
+            var actualResult = paaPindenContextForInit.KnittingPosts.Where(kp => kp.Id == testInitializeKnittingPost.Id).FirstOrDefault();
             Assert.AreEqual(expectedResult, actualResult);
         }
     }
-
-
 }
