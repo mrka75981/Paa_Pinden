@@ -29,6 +29,7 @@ namespace Tests
                 Author = "Jens",
                 KnittingPostContent = new Content
                 {
+                    Text = "Mit første opslag!",
                     Pictures = new List<ContentPicture>()
                     {
                         new ContentPicture

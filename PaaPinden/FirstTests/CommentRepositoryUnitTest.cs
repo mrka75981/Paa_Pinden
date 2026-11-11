@@ -32,6 +32,7 @@ namespace Tests
                 Author = "Jens",
                 KnittingPostContent = new Content
                 {
+                    Text = "Mit første opslag!",
                     Pictures = new List<ContentPicture>()
                     {
                         new ContentPicture
@@ -70,12 +71,16 @@ namespace Tests
             paaPindenContextForInit.SaveChanges();
             paaPindenContextForInit.KnittingPosts.Add(testInitializeKnittingPost);
             paaPindenContextForInit.SaveChanges();
+
+            testInitializeComment.CommentKnittingPostId = testInitializeKnittingPost.Id;
+            testMethodComment.CommentKnittingPostId = testInitializeKnittingPost.Id;
+
             paaPindenContextForInit.Comments.Add(testInitializeComment);
             paaPindenContextForInit.SaveChanges();
         }
 
         [TestMethod]
-        public async Task CreateCommentAsync_Test(Comment comment)
+        public async Task CreateCommentAsync_Test()
         {
             // Arrange
             var expectedResult = testMethodComment;
@@ -89,7 +94,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public async Task UpdateCommentAsync_Test(int id)
+        public async Task UpdateCommentAsync_Test()
         {
             // Arrange
             testInitializeComment.Text = "ændret kommentar";
@@ -104,7 +109,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public async Task GetAllPostCommentsAsync_Test(int id)
+        public async Task GetAllPostCommentsAsync_Test()
         {
             // Arrange
             List<Comment> expectedResult = new List<Comment>() { testInitializeComment };
@@ -113,11 +118,11 @@ namespace Tests
             List<Comment> actualResult = await testMethodCommentRepo.GetAllPostCommentsAsync(testInitializeComment.CommentKnittingPostId);
 
             // Assert
-            Assert.AreEqual(expectedResult, actualResult);
+            Assert.IsTrue(actualResult.Select(c => c.Id).All(c => expectedResult.Select(c => c.Id).Contains(c)));
         }
 
         [TestMethod]
-        public async Task DeleteCommentAsync_Test(int id)
+        public async Task DeleteCommentAsync_Test()
         {
             // Arrange
             int testInitializeCommentId = testInitializeComment.Id;
