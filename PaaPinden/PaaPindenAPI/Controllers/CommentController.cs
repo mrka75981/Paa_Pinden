@@ -42,21 +42,29 @@ namespace PaaPindenAPI.Controllers
             return Ok();
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAllPostCommentsAsync(int id)
+        {
+            if (id <= 0) return BadRequest();
+
+            var comments = await _commentRepository.GetAllPostCommentsAsync(id);
+
+            if (comments == null) return NotFound();
+
+            return Ok(comments);
+        }
+
         [HttpPut]
         public async Task<IActionResult> UpdateCommentAsync(CommentDTO commentDTO)
         {
             if (commentDTO == null || commentDTO.Id <= 0)
                 return BadRequest();
 
-            Comment comment = new Comment()
-            {
-                Id = commentDTO.Id,
-                TimeStamp = commentDTO.TimeStamp,
-                Text = commentDTO.Text,
-                Writer = commentDTO.Writer,
-                CommentKnittingPostId = commentDTO.CommentKnittingPostId
-            };
+            var comment = await _commentRepository.GetCommentAsync(commentDTO.Id);
+            if (comment == null) return NotFound();
 
+            comment.Text = commentDTO.Text;
+      
             await _commentRepository.UpdateCommentAsync(comment);
             return Ok();
         }
@@ -66,8 +74,8 @@ namespace PaaPindenAPI.Controllers
         {
             if (id <= 0)
                 return BadRequest();
-            //if (await _commentRepository(id) == null)
-            //    return NotFound();
+            if (await  _commentRepository.GetCommentAsync(id) == null)
+                return NotFound();
 
             await _commentRepository.DeleteCommentAsync(id);
             return Ok();

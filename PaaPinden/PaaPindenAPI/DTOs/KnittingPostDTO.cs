@@ -8,7 +8,6 @@ namespace PaaPindenAPI.DTOs
         public string Title { get; set; }
         public DateTime TimeStamp { get; set; }
         public string Author { get; set; }
-        public List<CommentDTO>? Comments { get; set; }
         public Content KnittingPostContent { get; set; }
     }
 }

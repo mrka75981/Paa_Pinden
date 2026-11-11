@@ -5,7 +5,6 @@ namespace PaaPindenAPI.Models
 {
     public class Comment
     {
-        public KnittingPost CommentKnittingPost { get; set; }
         public int CommentKnittingPostId { get; set; }
         public int Id { get; set; }
         public string Text { get; set; }

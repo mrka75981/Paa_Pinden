@@ -10,6 +10,8 @@ namespace PaaPindenAPI.Repositories
 
         public Task<List<Comment>> GetAllPostCommentsAsync(int id);
 
+        public Task<Comment> GetCommentAsync(int id);
+
         public Task DeleteCommentAsync(int id);
     }
 }
