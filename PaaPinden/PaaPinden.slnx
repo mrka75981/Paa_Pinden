@@ -1,3 +1,5 @@
 <Solution>
+  <Project Path="FirstTests/Tests.csproj" />
   <Project Path="PaaPindenAPI/PaaPindenAPI.csproj" />
+  <Project Path="PaaPindenBlazor/PaaPindenBlazor.csproj" />
 </Solution>
