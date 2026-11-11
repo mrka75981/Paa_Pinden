@@ -4,14 +4,14 @@ namespace PaaPindenAPI.Repositories
 {
     public interface IKnittingPostRepository
     {
-        Task CreateKnittingPostAsync(KnittingPost knittingPost);
+        public Task CreateKnittingPostAsync(KnittingPost knittingPost);
 
-        Task<KnittingPost> GetKnittingPostAsync(int id);
+        public Task<KnittingPost> GetKnittingPostAsync(int id);
 
-        Task<List<KnittingPost>> GetAllKnittingPostAsync();
+        public Task<List<KnittingPost>> GetAllKnittingPostAsync();
 
-        Task DeleteKnittingPostAsync(int id);
-
-        Task UpdateKnittingPostAsync(KnittingPost knittingPost);
+        public Task DeleteKnittingPostAsync(int id);
+        
+        public Task UpdateKnittingPostAsync(KnittingPost knittingPost);
     }
 }

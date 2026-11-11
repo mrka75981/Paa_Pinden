@@ -1,27 +1,56 @@
-﻿using PaaPindenAPI.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PaaPindenAPI.Data;
+using PaaPindenAPI.Models;
 
 namespace PaaPindenAPI.Repositories
 {
     public class CommentRepository : ICommentRepository
     {
-        public Task CreateCommentAsync(Comment comment)
+        private readonly PaaPindenContext _paaPindenContext;
+
+        public CommentRepository(PaaPindenContext paaPindenContext)
         {
-            throw new NotImplementedException();
+            _paaPindenContext = paaPindenContext;
         }
 
-        public Task DeleteCommentAsync(int id)
+        public async Task CreateCommentAsync(Comment comment)
         {
-            throw new NotImplementedException();
+            await _paaPindenContext.Comments.AddAsync(comment);
+            await _paaPindenContext.SaveChangesAsync();
         }
 
-        public Task<List<Comment>> GetAllPostCommentsAsync(int knittingPostId)
+        public async Task DeleteCommentAsync(int id)
         {
-            throw new NotImplementedException();
+            var comment = await _paaPindenContext.Comments.FindAsync(id);
+            if (comment != null)
+            {
+                _paaPindenContext.Comments.Remove(comment);
+                await _paaPindenContext.SaveChangesAsync();
+            }
         }
 
-        public Task<Comment> UpdateCommentAsync(Comment comment)
+        public async Task<Comment> GetCommentAsync(int id)
         {
-            throw new NotImplementedException();
+            var comment = await _paaPindenContext.Comments.SingleOrDefaultAsync(c => c.Id == id);
+            if (comment == null) return null;
+            return comment;
+        }
+
+        public async Task<List<Comment>> GetAllPostCommentsAsync(int id)
+        {
+            var knittingPostComments = await _paaPindenContext.Comments.Where(c => c.CommentKnittingPostId == id).ToListAsync();
+            if (knittingPostComments != null)
+            {
+                return knittingPostComments;
+            }
+            return null;
+        }
+
+        public async Task UpdateCommentAsync(Comment comment)
+        {
+            //_paaPindenContext.Comments.Update(comment);
+
+            await _paaPindenContext.SaveChangesAsync();
         }
     }
 }

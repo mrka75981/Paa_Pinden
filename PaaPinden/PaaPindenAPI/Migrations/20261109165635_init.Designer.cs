@@ -12,8 +12,8 @@ using PaaPindenAPI.Data;
 namespace PaaPindenAPI.Migrations
 {
     [DbContext(typeof(PaaPindenContext))]
-    [Migration("20261105124734_Init")]
-    partial class Init
+    [Migration("20261109165635_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,7 +28,10 @@ namespace PaaPindenAPI.Migrations
             modelBuilder.Entity("PaaPindenAPI.Models.Comment", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CommentKnittingPostId")
                         .HasColumnType("int");
@@ -59,7 +62,7 @@ namespace PaaPindenAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("KnittingPostId")
+                    b.Property<int>("KnittingPostId")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -68,7 +71,8 @@ namespace PaaPindenAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("KnittingPostId");
+                    b.HasIndex("KnittingPostId")
+                        .IsUnique();
 
                     b.ToTable("Contents");
                 });
@@ -115,9 +119,6 @@ namespace PaaPindenAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("KnittingPostContentId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("TimeStamp")
                         .HasColumnType("datetime2");
 
@@ -127,32 +128,24 @@ namespace PaaPindenAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("KnittingPostContentId");
-
                     b.ToTable("KnittingPosts");
                 });
 
             modelBuilder.Entity("PaaPindenAPI.Models.Comment", b =>
                 {
-                    b.HasOne("PaaPindenAPI.Models.KnittingPost", "CommentKnittingPost")
-                        .WithMany()
-                        .HasForeignKey("CommentKnittingPostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("PaaPindenAPI.Models.KnittingPost", null)
                         .WithMany("Comments")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("CommentKnittingPostId")
                         .IsRequired();
-
-                    b.Navigation("CommentKnittingPost");
                 });
 
             modelBuilder.Entity("PaaPindenAPI.Models.Content", b =>
                 {
                     b.HasOne("PaaPindenAPI.Models.KnittingPost", null)
-                        .WithMany()
-                        .HasForeignKey("KnittingPostId");
+                        .WithOne("KnittingPostContent")
+                        .HasForeignKey("PaaPindenAPI.Models.Content", "KnittingPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PaaPindenAPI.Models.ContentPicture", b =>
@@ -173,17 +166,6 @@ namespace PaaPindenAPI.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PaaPindenAPI.Models.KnittingPost", b =>
-                {
-                    b.HasOne("PaaPindenAPI.Models.Content", "KnittingPostContent")
-                        .WithMany()
-                        .HasForeignKey("KnittingPostContentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("KnittingPostContent");
-                });
-
             modelBuilder.Entity("PaaPindenAPI.Models.Content", b =>
                 {
                     b.Navigation("Pictures");
@@ -194,6 +176,9 @@ namespace PaaPindenAPI.Migrations
             modelBuilder.Entity("PaaPindenAPI.Models.KnittingPost", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("KnittingPostContent")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

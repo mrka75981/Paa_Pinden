@@ -1,32 +1,66 @@
-﻿using PaaPindenAPI.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PaaPindenAPI.Data;
+using PaaPindenAPI.Models;
 
 namespace PaaPindenAPI.Repositories
 {
     public class KnittingPostRepository : IKnittingPostRepository
     {
-        public Task CreateKnittingPostAsync(KnittingPost knittingPost)
+        private readonly PaaPindenContext _paaPindenContext;
+
+        public KnittingPostRepository(PaaPindenContext paaPindenContext)
         {
-            throw new NotImplementedException();
+            _paaPindenContext = paaPindenContext;
         }
 
-        public Task DeleteKnittingPostAsync(int id)
+        public async Task CreateKnittingPostAsync(KnittingPost knittingPost)
         {
-            throw new NotImplementedException();
+            await _paaPindenContext.KnittingPosts.AddAsync(knittingPost);
+            await _paaPindenContext.SaveChangesAsync();
         }
 
-        public Task<List<KnittingPost>> GetAllKnittingPostAsync()
+        public async Task DeleteKnittingPostAsync(int id)
         {
-            throw new NotImplementedException();
+            var knittingPost = await _paaPindenContext.KnittingPosts.FindAsync(id);
+            if (knittingPost != null)
+            {
+                _paaPindenContext.KnittingPosts.Remove(knittingPost);
+                await _paaPindenContext.SaveChangesAsync();
+            }
         }
 
-        public Task<KnittingPost> GetKnittingPostAsync(int id)
+        public async Task<List<KnittingPost>> GetAllKnittingPostAsync()
         {
-            throw new NotImplementedException();
+            List<KnittingPost> knittingPosts = await _paaPindenContext.KnittingPosts
+                .Include(k => k.Comments)
+                .Include(k => k.KnittingPostContent)
+                .Include(k => k.KnittingPostContent.Videos)
+                .Include(k => k.KnittingPostContent.Pictures).ToListAsync();
+
+            return knittingPosts;
         }
 
-        public Task UpdateKnittingPostAsync(KnittingPost knittingPost)
+        public async Task<KnittingPost> GetKnittingPostAsync(int id)
         {
-            throw new NotImplementedException();
+            var knittingPost = await _paaPindenContext.KnittingPosts
+                .Include(k => k.Comments)
+                .Include(k => k.KnittingPostContent)
+                .Include(k => k.KnittingPostContent.Videos)
+                .Include(k => k.KnittingPostContent.Pictures)
+                .SingleOrDefaultAsync(k => k.Id == id);
+            if (knittingPost != null)
+            {
+                return knittingPost;
+            }
+            return null;
+        }
+
+        public async Task UpdateKnittingPostAsync(KnittingPost knittingPost)
+        {
+            //Not needed anymore cause of tracking <3
+            //_paaPindenContext.KnittingPosts.Update(knittingPost);
+
+            await _paaPindenContext.SaveChangesAsync();
         }
     }
 }

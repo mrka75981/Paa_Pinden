@@ -21,7 +21,9 @@ namespace PaaPindenAPI.Data
             modelbuilder.Entity<KnittingPost>();
 
             modelbuilder.Entity<Content>()
-                .HasOne<KnittingPost>();
+                .HasOne<KnittingPost>()
+                .WithOne(k => k.KnittingPostContent)
+                .HasForeignKey<Content>(c => c.KnittingPostId);
 
             modelbuilder.Entity<ContentPicture>().HasKey(c => c.Path);
 
@@ -40,7 +42,7 @@ namespace PaaPindenAPI.Data
             modelbuilder.Entity<Comment>()
                 .HasOne<KnittingPost>()
                 .WithMany(k => k.Comments)
-                .HasForeignKey(c => c.Id)
+                .HasForeignKey(c => c.CommentKnittingPostId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
