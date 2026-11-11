@@ -112,13 +112,14 @@ namespace Tests
         public async Task GetAllPostCommentsAsync_Test()
         {
             // Arrange
-            List<Comment> expectedResult = new List<Comment>() { testInitializeComment };
+            List<Comment> expectedResults = new List<Comment>() { testInitializeComment };
 
             // Act
-            List<Comment> actualResult = await testMethodCommentRepo.GetAllPostCommentsAsync(testInitializeComment.CommentKnittingPostId);
+            List<Comment> actualResults = await testMethodCommentRepo.GetAllPostCommentsAsync(testInitializeComment.CommentKnittingPostId);
 
             // Assert
-            Assert.IsTrue(actualResult.Select(c => c.Id).All(c => expectedResult.Select(c => c.Id).Contains(c)));
+            Assert.IsTrue(actualResults.Select(c => c.Id).All(c => expectedResults.Select(c => c.Id).Contains(c))); //All actualResults members are contained within expectedResults. 
+            Assert.HasCount(expectedResults.Count, actualResults); //expectedResults do not have more members than actualResults (rendering the prior assertion incomplete). 
         }
 
         [TestMethod]
