@@ -51,14 +51,14 @@ namespace Tests
             testMethodCommentRepo = new CommentRepository(paaPindenContextForRepo);
             testMethodComment = new Comment()
             {
-                CommentKnittingPost = testInitializeKnittingPost,
+                CommentKnittingPostId = testInitializeKnittingPost.Id,
                 Text = "test kommentar",
                 Writer = "jens fjende",
                 TimeStamp = DateTime.Today
             };
             testInitializeComment = new Comment()
             {
-                CommentKnittingPost = testInitializeKnittingPost,
+                CommentKnittingPostId = testInitializeKnittingPost.Id,
                 Text = "første kommentar",
                 Writer = "jens fjende",
                 TimeStamp = DateTime.Today
@@ -110,7 +110,7 @@ namespace Tests
             List<Comment> expectedResult = new List<Comment>() { testInitializeComment };
 
             // Act
-            List<Comment> actualResult = await testMethodCommentRepo.GetAllPostCommentsAsync(testInitializeComment.CommentKnittingPost.Id);
+            List<Comment> actualResult = await testMethodCommentRepo.GetAllPostCommentsAsync(testInitializeComment.CommentKnittingPostId);
 
             // Assert
             Assert.AreEqual(expectedResult, actualResult);
