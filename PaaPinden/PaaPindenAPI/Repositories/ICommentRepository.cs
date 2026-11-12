@@ -1,4 +1,4 @@
-﻿using PaaPindenAPI.Models;
+﻿using Shared.Models;
 
 namespace PaaPindenAPI.Repositories
 {

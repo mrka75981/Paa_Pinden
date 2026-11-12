@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "Blazor + API",
+    "Projects": [
+      {
+        "Path": "PaaPindenAPI\\PaaPindenAPI.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "PaaPindenBlazor\\PaaPindenBlazor.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

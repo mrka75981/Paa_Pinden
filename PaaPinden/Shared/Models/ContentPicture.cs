@@ -1,4 +1,4 @@
-﻿namespace PaaPindenAPI.Models
+﻿namespace Shared.Models
 {
     public class ContentPicture
     {
