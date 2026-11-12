@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PaaPindenAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -44,7 +44,8 @@ namespace PaaPindenAPI.Migrations
                         name: "FK_Comments_KnittingPosts_CommentKnittingPostId",
                         column: x => x.CommentKnittingPostId,
                         principalTable: "KnittingPosts",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

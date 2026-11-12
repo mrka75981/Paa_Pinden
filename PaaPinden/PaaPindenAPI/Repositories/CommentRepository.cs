@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
 using PaaPindenAPI.Data;
 using PaaPindenAPI.Models;
 
@@ -46,11 +47,15 @@ namespace PaaPindenAPI.Repositories
             return null;
         }
 
-        public async Task UpdateCommentAsync(Comment comment)
+        public async Task<bool> UpdateCommentAsync(Comment comment)
         {
-            //_paaPindenContext.Comments.Update(comment);
+            var changeComment = await GetCommentAsync(comment.Id);
+            if (changeComment == null) return false;
+
+            changeComment.Text = comment.Text;
 
             await _paaPindenContext.SaveChangesAsync();
+            return true;
         }
     }
 }
