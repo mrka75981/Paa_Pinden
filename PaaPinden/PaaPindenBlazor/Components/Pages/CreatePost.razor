@@ -7,6 +7,8 @@
     <DataAnnotationsValidator></DataAnnotationsValidator>
     <ValidationSummary></ValidationSummary>
     <InputNumber @bind-Value="knittingPost.Id" hidden></InputNumber>
+    <InputDate @bind-Value="knittingPost.TimeStamp" hidden></InputDate>
+    <InputText @bind-Value="knittingPost.Author" hidden></InputText>
 
     <div class="mb-3">
         <div class="col-2">
@@ -17,12 +19,28 @@
         </div> 
         <div class="col">
             <ValidationMessage For="() => knittingPost.Title"></ValidationMessage>
+        </div> 
+
+        <div class="col-2">
+            <label class="col-form-label">Indhold</label>
         </div>
+        <div class="col-6">
+            <InputFile @bind-Value="knittingPost.KnittingPostContent.Pictures" class="form-control"></InputFile>
+            <InputText @bind-Value="knittingPost.KnittingPostContent.Text" class="form-control"></InputText>
+        </div>
+        <div class="col">
+            <ValidationMessage For="() => knittingPost.KnittingPostContent"></ValidationMessage>
+        </div>
+        <br />
+        <button class="btn btn-primary" type="submit">Post</button>
+        &nbsp;
+        <a href="/" class="btn btn-primary">Close</a>
     </div>
 </EditForm>
 
 @code {
-    private KnittingPostDTO knittingPost { get; set; } = new KnittingPostDTO();
+    private KnittingPostDTO knittingPost { get; set; } = new KnittingPostDTO(){
+        KnittingPostContent = new()};
 
 
     private async Task Submit()
