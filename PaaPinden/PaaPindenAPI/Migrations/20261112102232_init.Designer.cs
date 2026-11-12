@@ -12,8 +12,8 @@ using PaaPindenAPI.Data;
 namespace PaaPindenAPI.Migrations
 {
     [DbContext(typeof(PaaPindenContext))]
-    [Migration("20261111105146_Init")]
-    partial class Init
+    [Migration("20261112102232_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -136,6 +136,7 @@ namespace PaaPindenAPI.Migrations
                     b.HasOne("PaaPindenAPI.Models.KnittingPost", null)
                         .WithMany("Comments")
                         .HasForeignKey("CommentKnittingPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
