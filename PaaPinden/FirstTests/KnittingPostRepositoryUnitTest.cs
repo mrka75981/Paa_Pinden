@@ -29,6 +29,7 @@ namespace Tests
                 Author = "Jens",
                 KnittingPostContent = new Content
                 {
+                    Text = "Mit første opslag!",
                     Pictures = new List<ContentPicture>()
                     {
                         new ContentPicture
@@ -61,6 +62,7 @@ namespace Tests
                 },
                 KnittingPostContent = new Content
                 {
+                    Text = "første opslag!",
                     Pictures = new List<ContentPicture>()
                     {
                         new ContentPicture
@@ -97,7 +99,7 @@ namespace Tests
 
             // Assert
             var actualResult = paaPindenContextForInit.KnittingPosts.Where( kp => kp.Id == testMethodKnittingPost.Id).FirstOrDefault();
-            Assert.AreEqual(expectedResult, actualResult);
+            Assert.AreEqual(expectedResult.Id, actualResult.Id);
         }
 
         [TestMethod]
@@ -110,20 +112,36 @@ namespace Tests
             var actualResult = await testMethodRepo.GetKnittingPostAsync(testInitializeKnittingPost.Id);
 
             // Assert
-            Assert.AreEqual(expectedResult, actualResult);
+            Assert.AreEqual(expectedResult.Id, actualResult.Id);
+            Assert.AreEqual(expectedResult.Title, actualResult.Title);
+            Assert.AreEqual(expectedResult.TimeStamp, actualResult.TimeStamp);
+            Assert.AreEqual(expectedResult.Author, actualResult.Author);
+
+            Assert.IsTrue(actualResult.Comments.Select(c => c.Id).All(c => expectedResult.Comments.Select(c => c.Id).Contains(c))); //All actualResults members are contained within expectedResults. 
+            Assert.HasCount(expectedResult.Comments.Count, actualResult.Comments); //expectedResults do not have more members than actualResults (rendering the prior assertion incomplete). 
+
+            Assert.AreEqual(expectedResult.KnittingPostContent.Id, actualResult.KnittingPostContent.Id);
+            Assert.AreEqual(expectedResult.KnittingPostContent.Text, actualResult.KnittingPostContent.Text);
+
+            Assert.IsTrue(actualResult.KnittingPostContent.Pictures.Select(p => p.Path).All(p => expectedResult.KnittingPostContent.Pictures.Select(p => p.Path).Contains(p))); //All actualResults members are contained within expectedResults. 
+            Assert.HasCount(expectedResult.KnittingPostContent.Pictures.Count, actualResult.KnittingPostContent.Pictures); //expectedResults do not have more members than actualResults (rendering the prior assertion incomplete). 
+
+            Assert.IsTrue(actualResult.KnittingPostContent.Videos.Select(p => p.Path).All(p => expectedResult.KnittingPostContent.Videos.Select(p => p.Path).Contains(p))); //All actualResults members are contained within expectedResults. 
+            Assert.HasCount(expectedResult.KnittingPostContent.Videos.Count, actualResult.KnittingPostContent.Videos); //expectedResults do not have more members than actualResults (rendering the prior assertion incomplete). 
         }
 
         [TestMethod]
         public async Task GetAllKnittingPostsAsync_Test()
         {
             // Arrange
-            List<KnittingPost> expectedResult = new List<KnittingPost>() { testInitializeKnittingPost };
+            List<KnittingPost> expectedResults = new List<KnittingPost>() { testInitializeKnittingPost };
 
             // Act
-            var actualResult = await testMethodRepo.GetAllKnittingPostAsync();
+            var actualResults = await testMethodRepo.GetAllKnittingPostAsync();
 
             // Assert
-            Assert.AreEqual(expectedResult, actualResult);
+            Assert.IsTrue(actualResults.Select(kp => kp.Id).All(kp => expectedResults.Select(kp => kp.Id).Contains(kp))); //All actualResults members are contained within expectedResults. 
+            Assert.HasCount(expectedResults.Count, actualResults); //expectedResults do not have more members than actualResults (rendering the prior assertion incomplete). 
         }
 
         [TestMethod]

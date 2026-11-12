@@ -63,15 +63,13 @@ namespace PaaPindenAPI.Controllers
         {
             if (knittingPostDTO == null || knittingPostDTO.Id <= 0)
                 return BadRequest();
-            var knittingPost = await _knittingPostRepository.GetKnittingPostAsync(knittingPostDTO.Id);
-
-            if (knittingPost == null)
-                return NotFound();
-
-            //Remap changable variables
-            knittingPost.KnittingPostContent = knittingPostDTO.KnittingPostContent;
-            knittingPost.Title = knittingPostDTO.Title;
-
+   
+            KnittingPost knittingPost = new KnittingPost
+            {
+                Id = knittingPostDTO.Id,
+                KnittingPostContent = knittingPostDTO.KnittingPostContent,
+                Title = knittingPostDTO.Title
+            };
 
             await _knittingPostRepository.UpdateKnittingPostAsync(knittingPost);
             return Ok();

@@ -133,6 +133,7 @@ namespace PaaPindenAPI.Migrations
                     b.HasOne("PaaPindenAPI.Models.KnittingPost", null)
                         .WithMany("Comments")
                         .HasForeignKey("CommentKnittingPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
