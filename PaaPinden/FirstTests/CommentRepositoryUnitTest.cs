@@ -105,7 +105,10 @@ namespace Tests
 
             // Assert
             var actualResult = paaPindenContextForRepo.Comments.Where(c => c.Id == testInitializeComment.Id).FirstOrDefault();
-            Assert.AreEqual(expectedResult, actualResult);
+            Assert.AreEqual(expectedResult.Text, actualResult.Text);
+            Assert.AreEqual(expectedResult.TimeStamp, actualResult.TimeStamp);
+            Assert.AreEqual(expectedResult.Writer, actualResult.Writer);
+            Assert.AreEqual(expectedResult.CommentKnittingPostId, actualResult.CommentKnittingPostId);
         }
 
         [TestMethod]
