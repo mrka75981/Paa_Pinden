@@ -1,0 +1,21 @@
+﻿.post {
+    width: 50%;
+    height: 200px;
+}
+
+.postTitle {
+    display: flex;
+    justify-content: left;
+}
+
+.postDesc {
+    color: gray;
+    display: flex;
+    justify-content: left;
+}
+
+.postImage {
+    width: 200px;
+    height: 200px;
+    margin: auto;
+}
