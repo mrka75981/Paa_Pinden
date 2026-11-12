@@ -1,5 +1,32 @@
-﻿<h3>CreatePost</h3>
+﻿@page "/createpost"
+@inject IPaaPindenAPIService PaaPindenAPI
+
+<h3>Create a KnittingPost</h3>
+
+<EditForm Model="knittingPost" FormName="formServer" OnValidSubmit="Submit">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <ValidationSummary></ValidationSummary>
+    <InputNumber @bind-Value="knittingPost.Id" hidden></InputNumber>
+
+    <div class="mb-3">
+        <div class="col-2">
+            <label class="col-form-label">Title</label>
+        </div>
+        <div class="col-6">
+            <InputText @bind-Value="knittingPost.Title" class="form-control"></InputText>
+        </div> 
+        <div class="col">
+            <ValidationMessage For="() => knittingPost.Title"></ValidationMessage>
+        </div>
+    </div>
+</EditForm>
 
 @code {
+    private KnittingPostDTO knittingPost { get; set; } = new KnittingPostDTO();
 
+
+    private async Task Submit()
+    {
+        await PaaPindenAPI.CreateKnittingPost(knittingPost);
+    }
 }
