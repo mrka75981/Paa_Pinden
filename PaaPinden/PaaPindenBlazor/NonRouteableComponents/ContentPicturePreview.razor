@@ -1,0 +1,12 @@
+﻿@using Shared.Models
+
+<h3>ContentPicturePreview</h3>
+
+@if (ContentPicture != null)
+{
+    <img src="@ContentPicture.Path" class="img-fluid" alt="..."/>
+}
+
+@code {
+    ContentPicture ContentPicture { get; set; } = new ContentPicture();
+}
