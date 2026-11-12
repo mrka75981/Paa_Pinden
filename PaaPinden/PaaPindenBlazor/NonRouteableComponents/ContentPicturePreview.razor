@@ -1,12 +1,12 @@
 ﻿@using Shared.Models
 
-<h3>ContentPicturePreview</h3>
-
 @if (ContentPicture != null)
 {
+    <p class="text-body-secondary">>Her kan du se dit billede</p>
     <img src="@ContentPicture.Path" class="img-fluid" alt="..."/>
 }
 
 @code {
-    ContentPicture ContentPicture { get; set; } = new ContentPicture();
+    [Parameter]
+    public ContentPicture ContentPicture { get; set; } = new ContentPicture();
 }

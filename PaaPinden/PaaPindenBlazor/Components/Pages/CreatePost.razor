@@ -36,13 +36,23 @@
         &nbsp;
         <a href="/" class="btn btn-primary">Close</a>
     </div>
-</EditForm>
+</EditForm> 
+<!-- Currently only able to add one picture InputFile hence the first element is binded here -->
+<!-- For files we should use IFormFile but this could lead to issues with the dbcontext -->
+<PaaPindenBlazor.NonRouteableComponents.ContentPicturePreview>
+
+</PaaPindenBlazor.NonRouteableComponents.ContentPicturePreview>
 
 @code {
-    private KnittingPostDTO knittingPost { get; set; } = new KnittingPostDTO(){
-        KnittingPostContent = new()};
+    private KnittingPostDTO knittingPost { get; set; } = new KnittingPostDTO()
+        {
+            KnittingPostContent = new()
+            {
+                Pictures = new(),
+                Videos = new()
+            }
 
-
+        };
     private async Task Submit()
     {
         await PaaPindenAPI.CreateKnittingPost(knittingPost);
