@@ -1,6 +1,8 @@
 ﻿@page "/createpost"
+@rendermode InteractiveServer
 @using PaaPindenBlazor.NonRouteableComponents
 @inject IPaaPindenAPIService PaaPindenAPI
+@inject NavigationManager NavigationManager
 
 
 <h3>Create a KnittingPost</h3>
@@ -50,27 +52,13 @@
 
 @code {
     [SupplyParameterFromForm(FormName = "FormKnittingPost")]
-    private KnittingPostDTO knittingPost { get; set; } = new KnittingPostDTO()
-        {
-            KnittingPostContent = new()
-            {
-                Pictures = new()
-                {
-                    new ContentPicture
-                    {
+    private KnittingPostDTO knittingPost { get; set; }
 
-                    }
+    ContentPictureUpload contentPictureUpload { get; set; } = new();
 
-                },
-                Videos = new()
-            }
-
-        };
-    private ContentPictureUpload contentPictureUpload = new();
 
     protected override void OnParametersSet()
     {
-        contentPictureUpload.FileInput ??= new();
         knittingPost ??= new KnittingPostDTO();
         knittingPost.KnittingPostContent ??= new();
         knittingPost.KnittingPostContent.Pictures ??= new();
@@ -85,7 +73,9 @@
 
     private async Task Submit()
     {
-        await contentPictureUpload.UploadFile();
+        var filepath = await contentPictureUpload.UploadFile();
+        knittingPost.KnittingPostContent.Pictures[0].Path = filepath;
         await PaaPindenAPI.CreateKnittingPost(knittingPost);
+        NavigationManager.NavigateTo("/");
     }
 }

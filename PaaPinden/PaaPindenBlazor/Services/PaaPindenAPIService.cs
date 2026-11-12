@@ -30,7 +30,7 @@ namespace PaaPindenBlazor.Services
         {
             using var httpClient = _httpClientFactory.CreateClient("PaaPindenClient");
             var productjson = JsonSerializer.Serialize(knittingPostDTO);
-            using var request = new HttpRequestMessage(HttpMethod.Post, $"api/KnttingPost");
+            using var request = new HttpRequestMessage(HttpMethod.Post, $"api/KnittingPost");
             request.Content = new StringContent(
                 productjson,
                 System.Text.Encoding.UTF8,

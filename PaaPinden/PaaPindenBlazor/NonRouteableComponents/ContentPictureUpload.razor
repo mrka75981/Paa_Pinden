@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
 @using PaaPindenBlazor.Services
 <div>
-    <InputFile name="@FileInput.File" class="form-control"></InputFile>
+    <InputFile OnChange="OnSelectedFile" class="form-control"></InputFile>
 </div>
 
 
@@ -14,8 +14,13 @@
     [Parameter]
     public string? Filepath { get; set; } = "";
 
-    
-    public async Task UploadFile()
+    private async Task OnSelectedFile(InputFileChangeEventArgs args)
+    {
+        FileInput.File = args.File;
+    }
+
+
+    public async Task<string> UploadFile()
     {
         try
         {
@@ -23,17 +28,20 @@
             {
                 throw new Exception("File not found");
             }
-            folderpath = Path.Combine("C:\\KnittingPostPictures");
-            Filepath = Path.Combine(folderpath, FileInput.File.FileName);
+            folderpath = Path.Combine(AppContext.BaseDirectory,"KnittingPostPictures");
+            Filepath = Path.Combine(folderpath, FileInput.File.Name);
             Directory.CreateDirectory(folderpath);
             await using var stream = new FileStream(Filepath, FileMode.Create);
-            await FileInput.File.CopyToAsync(stream);
+            await FileInput.File.OpenReadStream().CopyToAsync(stream);
             resultmessage = "Upload Succesful!";
+            return Filepath;
         }
         catch(Exception ex)
         {
             resultmessage = ex.Message;
         }
+
+        return null;
 
     }
 }

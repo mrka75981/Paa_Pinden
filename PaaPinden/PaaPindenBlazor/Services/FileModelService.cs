@@ -1,7 +1,9 @@
-﻿namespace PaaPindenBlazor.Services
+﻿using Microsoft.AspNetCore.Components.Forms;
+
+namespace PaaPindenBlazor.Services
 {
     public class FileModelService
     {
-        public IFormFile File { get; set; }
+        public IBrowserFile? File { get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace PaaPindenBlazor
             });
 
             // Add services to the container.
-            builder.Services.AddRazorComponents();
+            builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
             var app = builder.Build();
 
@@ -35,7 +35,7 @@ namespace PaaPindenBlazor
             app.UseAntiforgery();
 
             app.MapStaticAssets();
-            app.MapRazorComponents<App>();
+            app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
             app.Run();
         }
