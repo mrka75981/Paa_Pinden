@@ -60,13 +60,16 @@ namespace PaaPindenAPI.Controllers
             if (commentDTO == null || commentDTO.Id <= 0)
                 return BadRequest();
 
-            var comment = await _commentRepository.GetCommentAsync(commentDTO.Id);
-            if (comment == null) return NotFound();
+            Comment comment = new Comment()
+            {
+                Id = commentDTO.Id,
+                Text = commentDTO.Text
+            };
 
-            comment.Text = commentDTO.Text;
-      
-            await _commentRepository.UpdateCommentAsync(comment);
-            return Ok();
+            if (await _commentRepository.UpdateCommentAsync(comment))
+                return Ok();
+
+            else return NotFound();
         }
 
         [HttpDelete("{id}")]
