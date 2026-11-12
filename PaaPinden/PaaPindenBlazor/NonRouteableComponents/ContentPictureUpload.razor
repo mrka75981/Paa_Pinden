@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using PaaPindenBlazor.Services
+<div>
+    <InputFile name="@FileInput.File" class="form-control"></InputFile>
+</div>
+
+
+
+@code {
+    public FileModelService FileInput { get; set; } = new();
+    string resultmessage = "";
+
+    private string? folderpath = "";
+    [Parameter]
+    public string? Filepath { get; set; } = "";
+
+    
+    public async Task UploadFile()
+    {
+        try
+        {
+            if (FileInput.File is null)
+            {
+                throw new Exception("File not found");
+            }
+            folderpath = Path.Combine("C:\\KnittingPostPictures");
+            Filepath = Path.Combine(folderpath, FileInput.File.FileName);
+            Directory.CreateDirectory(folderpath);
+            await using var stream = new FileStream(Filepath, FileMode.Create);
+            await FileInput.File.CopyToAsync(stream);
+            resultmessage = "Upload Succesful!";
+        }
+        catch(Exception ex)
+        {
+            resultmessage = ex.Message;
+        }
+
+    }
+}
