@@ -30,7 +30,7 @@
             <label class="col-form-label">Indhold</label>
         </div>
         <div class="col-6">
-            <PictureFile @ref="contentPictureUpload" Filepath="@knittingPost.KnittingPostContent.Pictures[0].Path"></PictureFile>
+            <PictureFile @ref="contentPictureUpload"></PictureFile>
         </div>
         <div class="col-6">
             <InputText @bind-Value="knittingPost.KnittingPostContent.Text" class="form-control"></InputText>
@@ -44,8 +44,6 @@
         <a href="/" class="btn btn-primary">Close</a>
     </div>
 </EditForm> 
-<!-- Currently only able to add one picture InputFile hence the first element is binded here -->
-<!-- For files we should use IFormFile but this could lead to issues with the dbcontext -->
 <ContentPicturePreview>
 
 </ContentPicturePreview>
@@ -72,7 +70,7 @@
 
 
     private async Task Submit()
-    { 
+    {
         var filepath = await contentPictureUpload.UploadFile();
         knittingPost.KnittingPostContent.Pictures[0].Path = filepath;
         await PaaPindenAPI.CreateKnittingPost(knittingPost);
