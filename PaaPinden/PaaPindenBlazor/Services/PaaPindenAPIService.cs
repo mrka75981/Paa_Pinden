@@ -26,11 +26,11 @@ namespace PaaPindenBlazor.Services
             using var response = await httpClient.SendAsync(request);
         }
 
-        public async Task CreateKnittingPost(KnittingPostDTO knittingPostDTO)
+        public async Task CreateKnittingPostAsync(KnittingPostDTO knittingPostDTO)
         {
             using var httpClient = _httpClientFactory.CreateClient("PaaPindenClient");
             var productjson = JsonSerializer.Serialize(knittingPostDTO);
-            using var request = new HttpRequestMessage(HttpMethod.Post, $"api/KnttingPost");
+            using var request = new HttpRequestMessage(HttpMethod.Post, $"api/KnittingPost");
             request.Content = new StringContent(
                 productjson,
                 System.Text.Encoding.UTF8,
@@ -76,7 +76,7 @@ namespace PaaPindenBlazor.Services
         public async Task<KnittingPost> GetKnittingPostAsync(int id)
         {
             using var httpClient = _httpClientFactory.CreateClient("PaaPindenClient");
-            using var request = new HttpRequestMessage(HttpMethod.Get, $"api/KnittingPost");
+            using var request = new HttpRequestMessage(HttpMethod.Get, $"api/KnittingPost/{id}");
             using var response = await httpClient.SendAsync(request);
             KnittingPost knittingPost = await response.Content.ReadFromJsonAsync<KnittingPost>();
 
@@ -85,7 +85,7 @@ namespace PaaPindenBlazor.Services
 
         public async Task UpdateCommentAsync(CommentDTO commentDTO)
         {
-            using var httpClient = _httpClientFactory.CreateClient("DeepDiveApi");
+            using var httpClient = _httpClientFactory.CreateClient("PaaPindenClient");
             var productjson = JsonSerializer.Serialize(commentDTO);
             using var request = new HttpRequestMessage(HttpMethod.Put, $"api/Comment");
             request.Content = new StringContent(
