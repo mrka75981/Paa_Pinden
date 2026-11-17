@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Shared.DTOs;
+﻿using Shared.DTOs;
 using Shared.Models;
 
 namespace PaaPindenBlazor.Services
 {
     public interface IPaaPindenAPIService
     {
-        Task CreateKnittingPost(KnittingPostDTO knittingPostDTO);
+        Task CreateKnittingPostAsync(KnittingPostDTO knittingPostDTO);
 
         Task<KnittingPost> GetKnittingPostAsync(int id);
 
