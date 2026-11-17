@@ -1,13 +1,13 @@
 ﻿@page "/createpost"
-@rendermode InteractiveServer
 @using PaaPindenBlazor.NonRouteableComponents
 @inject IPaaPindenAPIService PaaPindenAPI
 @inject NavigationManager NavigationManager
+@inject IFileModelService FileModelService
 
 
 <h3>Create a KnittingPost</h3>
 
-<EditForm Model="knittingPost" FormName="FormKnittingPost" OnValidSubmit="Submit">
+<EditForm Model="knittingPost" FormName="FormKnittingPost" OnValidSubmit="Submit" method="post" enctype="multipart/form-data">
     <DataAnnotationsValidator></DataAnnotationsValidator>
     <ValidationSummary></ValidationSummary>
     <InputNumber @bind-Value="knittingPost.Id" hidden></InputNumber>
@@ -30,7 +30,7 @@
             <label class="col-form-label">Indhold</label>
         </div>
         <div class="col-6">
-            <PictureFile @ref="contentPictureUpload"></PictureFile>
+            <InputFile name="knittingPost.ImageFile" accept="image/*" class="form-control" />
         </div>
         <div class="col-6">
             <InputText @bind-Value="knittingPost.KnittingPostContent.Text" class="form-control"></InputText>
@@ -50,14 +50,10 @@
 
 @code {
     [SupplyParameterFromForm(FormName = "FormKnittingPost")]
-    private KnittingPostDTO knittingPost { get; set; }
-
-    PictureFile contentPictureUpload { get; set; } = new();
-
-
+    private KnittingPostCreateDTO knittingPost { get; set; }
     protected override void OnParametersSet()
     {
-        knittingPost ??= new KnittingPostDTO();
+        knittingPost ??= new KnittingPostCreateDTO();
         knittingPost.KnittingPostContent ??= new();
         knittingPost.KnittingPostContent.Pictures ??= new();
         knittingPost.KnittingPostContent.Videos ??= new();
@@ -71,9 +67,34 @@
 
     private async Task Submit()
     {
-        var filepath = await contentPictureUpload.UploadFile();
+        var filepath = await FileModelService.UploadFile(knittingPost.ImageFile);
         knittingPost.KnittingPostContent.Pictures[0].Path = filepath;
-        await PaaPindenAPI.CreateKnittingPost(knittingPost);
+        await PaaPindenAPI.CreateKnittingPostAsync(new KnittingPostDTO
+        {
+            Title = knittingPost.Title,
+            TimeStamp = DateTime.Today,
+            Author = knittingPost.Author,
+            KnittingPostContent = new Content
+            {
+                Text = knittingPost.KnittingPostContent.Text,
+                Pictures = new List<ContentPicture>()
+                {
+                    new ContentPicture
+                    {
+                        Path = filepath
+                    }
+                }, 
+                Videos = new List<ContentVideo>()
+                    {
+                        new ContentVideo
+                        {
+                            Path = "~/path/to/thisnew"
+                        }
+                    }
+            }
+            
+        });
         NavigationManager.NavigateTo("/");
     }
+
 }

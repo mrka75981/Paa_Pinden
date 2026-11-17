@@ -6,7 +6,6 @@ namespace PaaPindenBlazor.Services
     public class FileModelService : IFileModelService
     {
         private readonly IWebHostEnvironment _webHostEnviroment;
-        private IBrowserFile? _file { get; set; }
 
         private string _resultmessage = "";
 
@@ -18,29 +17,43 @@ namespace PaaPindenBlazor.Services
             _webHostEnviroment = webHostEnvironment;
         }
 
-        public void SetFilePath()
+        public void SetFilePath(IFormFile formFile)
         {
             _folderpath = Path.Combine(_webHostEnviroment.ContentRootPath, "KnittingPostPictures");
             Directory.CreateDirectory(_folderpath);
 
-            _filepath = Path.Combine(_folderpath, Path.GetFileName(_file!.Name));
+            int imageNameNum = 1;
+            string imageName = $"{imageNameNum}";
+            List<string> imageNames = Directory.GetFiles(_folderpath)
+                .Select(s => s.Split('.').First()) //got rid of the file extension. 
+                .Select(s => s.Split('\\').Last()) //got rid of the path thereto. 
+                .ToList();
+            while (imageNames.Contains(imageName))
+            {
+                imageNameNum++;
+                imageName = $"{imageNameNum}";
+            }
+
+            string fileExtension = formFile.FileName.Split('.').Last();
+            _filepath = Path.Combine(_folderpath, $"{imageName}.{fileExtension}");
+
 
             
         }
 
-        public async Task<string> UploadFile()
+        public async Task<string> UploadFile(IFormFile formFile)
         {
             try
             {
-                if (_file is null)
+                if (formFile is null)
                 {
                     throw new Exception("File not found");
                 }
-                SetFilePath();
+                SetFilePath(formFile);
 
 
                 await using var stream = new FileStream(_filepath, FileMode.Create);
-                await _file.OpenReadStream().CopyToAsync(stream);
+                await formFile.OpenReadStream().CopyToAsync(stream);
                 _resultmessage = "Upload Succesful!";
                 return _filepath;
             }
@@ -52,9 +65,6 @@ namespace PaaPindenBlazor.Services
             return _resultmessage;
 
         }
-        public async Task OnSelectedFile(InputFileChangeEventArgs args)
-        {
-            _file = args.File;
-        }
+        
     }
 }

@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Http;
 
 namespace PaaPindenBlazor.Services
 {
     public interface IFileModelService
     {
-        void SetFilePath();
-        Task<string> UploadFile();
-        Task OnSelectedFile(InputFileChangeEventArgs args);
+        Task<string> UploadFile(IFormFile formFile);
     }
 }
