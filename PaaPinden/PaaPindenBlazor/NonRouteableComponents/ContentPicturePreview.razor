@@ -1,0 +1,14 @@
+﻿@using Shared.DTOs
+@using Shared.Models
+
+@* Har brug for rendermode for at dette virker*@
+@* @if (KnittingPostCreateDTO.ImageFile != null)
+{
+    <p class="text-body-secondary">Her kan du se dit billede</p>
+    <img src="@KnittingPostCreateDTO.KnittingPostContent.Pictures[0].Path" class="img-fluid" alt="..."/>
+}
+
+@code {
+    [Parameter]
+    public KnittingPostCreateDTO KnittingPostCreateDTO { get; set; } = new();
+} *@

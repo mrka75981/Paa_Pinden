@@ -1,4 +1,4 @@
-﻿using PaaPindenAPI.Models;
+﻿using Shared.Models;
 
 namespace PaaPindenAPI.Repositories
 {
@@ -6,7 +6,7 @@ namespace PaaPindenAPI.Repositories
     {
         public Task CreateCommentAsync(Comment comment);
 
-        public Task UpdateCommentAsync(Comment comment);
+        public Task<bool> UpdateCommentAsync(Comment comment);
 
         public Task<List<Comment>> GetAllPostCommentsAsync(int id);
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PaaPindenAPI.Data;
-using PaaPindenAPI.Models;
+using Shared.Models;
+using Shared.DTOs;
 
 namespace PaaPindenAPI.Repositories
 {
@@ -57,8 +58,11 @@ namespace PaaPindenAPI.Repositories
 
         public async Task UpdateKnittingPostAsync(KnittingPost knittingPost)
         {
-            //Not needed anymore cause of tracking <3
-            //_paaPindenContext.KnittingPosts.Update(knittingPost);
+
+            var changeKnittingPost = await GetKnittingPostAsync(knittingPost.Id);
+
+            changeKnittingPost.Title = knittingPost.Title;
+            changeKnittingPost.KnittingPostContent = knittingPost.KnittingPostContent;
 
             await _paaPindenContext.SaveChangesAsync();
         }

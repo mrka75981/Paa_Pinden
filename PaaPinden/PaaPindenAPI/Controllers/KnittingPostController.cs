@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PaaPindenAPI.DTOs;
-using PaaPindenAPI.Models;
+using Shared.DTOs;
+using Shared.Models;
 using PaaPindenAPI.Repositories;
 
 namespace PaaPindenAPI.Controllers
@@ -63,15 +63,13 @@ namespace PaaPindenAPI.Controllers
         {
             if (knittingPostDTO == null || knittingPostDTO.Id <= 0)
                 return BadRequest();
-            var knittingPost = await _knittingPostRepository.GetKnittingPostAsync(knittingPostDTO.Id);
-
-            if (knittingPost == null)
-                return NotFound();
-
-            //Remap changable variables
-            knittingPost.KnittingPostContent = knittingPostDTO.KnittingPostContent;
-            knittingPost.Title = knittingPostDTO.Title;
-
+   
+            KnittingPost knittingPost = new KnittingPost
+            {
+                Id = knittingPostDTO.Id,
+                KnittingPostContent = knittingPostDTO.KnittingPostContent,
+                Title = knittingPostDTO.Title
+            };
 
             await _knittingPostRepository.UpdateKnittingPostAsync(knittingPost);
             return Ok();

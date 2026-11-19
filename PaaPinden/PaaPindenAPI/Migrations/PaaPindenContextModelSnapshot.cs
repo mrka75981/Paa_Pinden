@@ -22,7 +22,7 @@ namespace PaaPindenAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("PaaPindenAPI.Models.Comment", b =>
+            modelBuilder.Entity("Shared.Models.Comment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -51,7 +51,7 @@ namespace PaaPindenAPI.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("PaaPindenAPI.Models.Content", b =>
+            modelBuilder.Entity("Shared.Models.Content", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -74,7 +74,7 @@ namespace PaaPindenAPI.Migrations
                     b.ToTable("Contents");
                 });
 
-            modelBuilder.Entity("PaaPindenAPI.Models.ContentPicture", b =>
+            modelBuilder.Entity("Shared.Models.ContentPicture", b =>
                 {
                     b.Property<string>("Path")
                         .HasColumnType("nvarchar(450)");
@@ -89,7 +89,7 @@ namespace PaaPindenAPI.Migrations
                     b.ToTable("ContentPictures");
                 });
 
-            modelBuilder.Entity("PaaPindenAPI.Models.ContentVideo", b =>
+            modelBuilder.Entity("Shared.Models.ContentVideo", b =>
                 {
                     b.Property<string>("Path")
                         .HasColumnType("nvarchar(450)");
@@ -104,7 +104,7 @@ namespace PaaPindenAPI.Migrations
                     b.ToTable("ContentVideos");
                 });
 
-            modelBuilder.Entity("PaaPindenAPI.Models.KnittingPost", b =>
+            modelBuilder.Entity("Shared.Models.KnittingPost", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -128,49 +128,50 @@ namespace PaaPindenAPI.Migrations
                     b.ToTable("KnittingPosts");
                 });
 
-            modelBuilder.Entity("PaaPindenAPI.Models.Comment", b =>
+            modelBuilder.Entity("Shared.Models.Comment", b =>
                 {
-                    b.HasOne("PaaPindenAPI.Models.KnittingPost", null)
+                    b.HasOne("Shared.Models.KnittingPost", null)
                         .WithMany("Comments")
                         .HasForeignKey("CommentKnittingPostId")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PaaPindenAPI.Models.Content", b =>
-                {
-                    b.HasOne("PaaPindenAPI.Models.KnittingPost", null)
-                        .WithOne("KnittingPostContent")
-                        .HasForeignKey("PaaPindenAPI.Models.Content", "KnittingPostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PaaPindenAPI.Models.ContentPicture", b =>
+            modelBuilder.Entity("Shared.Models.Content", b =>
                 {
-                    b.HasOne("PaaPindenAPI.Models.Content", null)
+                    b.HasOne("Shared.Models.KnittingPost", null)
+                        .WithOne("KnittingPostContent")
+                        .HasForeignKey("Shared.Models.Content", "KnittingPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Shared.Models.ContentPicture", b =>
+                {
+                    b.HasOne("Shared.Models.Content", null)
                         .WithMany("Pictures")
                         .HasForeignKey("ContentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PaaPindenAPI.Models.ContentVideo", b =>
+            modelBuilder.Entity("Shared.Models.ContentVideo", b =>
                 {
-                    b.HasOne("PaaPindenAPI.Models.Content", null)
+                    b.HasOne("Shared.Models.Content", null)
                         .WithMany("Videos")
                         .HasForeignKey("ContentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PaaPindenAPI.Models.Content", b =>
+            modelBuilder.Entity("Shared.Models.Content", b =>
                 {
                     b.Navigation("Pictures");
 
                     b.Navigation("Videos");
                 });
 
-            modelBuilder.Entity("PaaPindenAPI.Models.KnittingPost", b =>
+            modelBuilder.Entity("Shared.Models.KnittingPost", b =>
                 {
                     b.Navigation("Comments");
 
