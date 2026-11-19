@@ -11,6 +11,8 @@ namespace PaaPindenBlazor
 
             builder.Services.AddScoped<IPaaPindenAPIService, PaaPindenAPIService>();
 
+            builder.Services.AddScoped<IFileModelService, FileModelService>();
+
             builder.Services.AddHttpClient("PaaPindenClient", client =>
             {
                 client.BaseAddress = new Uri("http://localhost:5044/");
