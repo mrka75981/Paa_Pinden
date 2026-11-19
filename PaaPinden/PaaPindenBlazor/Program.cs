@@ -1,4 +1,5 @@
 using PaaPindenBlazor.Components;
+using PaaPindenBlazor.Services;
 
 namespace PaaPindenBlazor
 {
@@ -7,6 +8,13 @@ namespace PaaPindenBlazor
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddScoped<IPaaPindenAPIService, PaaPindenAPIService>();
+
+            builder.Services.AddHttpClient("PaaPindenClient", client =>
+            {
+                client.BaseAddress = new Uri("http://localhost:5044/");
+            });
 
             // Add services to the container.
             builder.Services.AddRazorComponents();

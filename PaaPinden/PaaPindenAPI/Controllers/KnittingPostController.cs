@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PaaPindenAPI.DTOs;
-using PaaPindenAPI.Models;
+using Shared.DTOs;
+using Shared.Models;
 using PaaPindenAPI.Repositories;
 
 namespace PaaPindenAPI.Controllers

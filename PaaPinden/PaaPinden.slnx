@@ -2,4 +2,5 @@
   <Project Path="FirstTests/Tests.csproj" />
   <Project Path="PaaPindenAPI/PaaPindenAPI.csproj" />
   <Project Path="PaaPindenBlazor/PaaPindenBlazor.csproj" />
+  <Project Path="Shared/Shared.csproj" Id="631750a6-f26f-4bcd-b678-a9de63b0078f" />
 </Solution>

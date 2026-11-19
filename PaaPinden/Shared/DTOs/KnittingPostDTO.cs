@@ -1,6 +1,6 @@
-﻿using PaaPindenAPI.Models;
+﻿using Shared.Models;
 
-namespace PaaPindenAPI.DTOs
+namespace Shared.DTOs
 {
     public class KnittingPostDTO
     {

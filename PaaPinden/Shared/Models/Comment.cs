@@ -1,7 +1,4 @@
-﻿using PaaPindenAPI.Data;
-using PaaPindenAPI.Repositories;
-
-namespace PaaPindenAPI.Models
+﻿namespace Shared.Models
 {
     public class Comment
     {

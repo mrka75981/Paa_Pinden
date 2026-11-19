@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using PaaPindenAPI.Data;
-using PaaPindenAPI.Models;
+using Shared.Models;
 
 namespace PaaPindenAPI.Repositories
 {

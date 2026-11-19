@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PaaPindenAPI.Models;
+using Shared.Models;
 
 namespace PaaPindenAPI.Data
 {

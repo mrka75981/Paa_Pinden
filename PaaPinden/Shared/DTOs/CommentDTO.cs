@@ -1,6 +1,5 @@
-﻿using PaaPindenAPI.Models;
-
-namespace PaaPindenAPI.DTOs
+﻿
+namespace Shared.DTOs
 {
     public class CommentDTO
     {
