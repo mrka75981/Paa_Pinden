@@ -14,6 +14,8 @@ namespace PaaPindenAPI.Data
         public DbSet<Content> Contents { get; set; }
         public DbSet<KnittingPost> KnittingPosts { get; set; }
 
+        public DbSet<Project> Projects { get; set; }
+
         public PaaPindenContext(DbContextOptions<PaaPindenContext> options) : base(options)
         {
 
