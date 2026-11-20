@@ -34,7 +34,7 @@ namespace PaaPindenAPI.Controllers
             {
                 TimeStamp = commentDTO.TimeStamp,
                 Text = commentDTO.Text,
-                Writer = commentDTO.Writer,
+                UserId = commentDTO.UserId,
                 CommentKnittingPostId = commentDTO.CommentKnittingPostId
             };
 
