@@ -1,0 +1,118 @@
+﻿@inject NavigationManager _navigationManager
+@inject IConversionService _conversionService
+@inject IFileModelService _fileModelService
+@inject IProjectRepository _projectRepository
+
+@if (ProjectFormDTO != null)
+{
+    <EditForm Model="ProjectFormDTO" enctype="multipart/form-data" FormName="ProjectFormDTO" OnValidSubmit="Submit">
+        <DataAnnotationsValidator/>
+        <InputNumber @bind-Value="ProjectFormDTO.Id" hidden/>
+        <div class="row mb-3">
+            <label>Name</label>
+            <InputText @bind-Value="ProjectFormDTO.Name" />
+            <ValidationMessage For="() => ProjectFormDTO.Name" />
+        </div>
+        <div class="row mb-3">
+            <label>Preptime</label>
+            <InputText @bind-Value="ProjectFormDTO.Preptime" />
+            <ValidationMessage For="() => ProjectFormDTO.Preptime" />
+        </div>
+        <div class="row mb-3">
+            <label>Servings</label>
+            <InputNumber @bind-Value="ProjectFormDTO.Servings" />
+            <ValidationMessage For="() => ProjectFormDTO.Servings" />
+        </div>
+        <InputHidden @bind-Value="ProjectFormDTO.ImageName" />
+        <InputHidden @bind-Value="ProjectFormDTO.ImageExtension" />
+        <div class="row mb-3">
+            <label>ImageFile</label>
+            <InputFile name="RecipeDTO.ImageFile" />
+            <ValidationMessage For="() => ProjectFormDTO.ImageFile" />
+        </div>
+        <div class="row mb-3">
+            <label>Description</label>
+            <InputText @bind-Value="ProjectFormDTO.Description" />
+            <ValidationMessage For="() => ProjectFormDTO.Description" />
+        </div>
+        <div class="row mb-3">
+            <label>Ingredients</label>
+            <InputText @bind-Value="ProjectFormDTO.Ingredients" />
+            <ValidationMessage For="() => ProjectFormDTO.Ingredients" />
+        </div>
+        <div class="row mb-3">
+            <label>Instructions</label>
+            <InputText @bind-Value="ProjectFormDTO.Instructions" />
+            <ValidationMessage For="() => ProjectFormDTO.Instructions" />
+        </div>
+
+        <div class="row mb-3">
+            <label>CategoryId</label>
+            <InputSelect class="form-select" @bind-Value="ProjectFormDTO.CategoryId">
+                <option>-- Select --</option>
+                @if (categories != null)
+                {
+                    foreach (Category category in categories)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="() => ProjectFormDTO.CategoryId" />
+        </div>
+        <br />
+        <button class="btn btn-primary" type="submit">@Directive</button>
+        <a href="/recipes" class="btn btn-primary">Close</a>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public string? Directive { get; set; }
+    [Parameter]
+    public int ProjectId { get; set; }
+    [SupplyParameterFromForm(FormName = "ProjectForm")]
+    public ProjectFormDTO? ProjectFormDTO { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        switch (Directive)
+        {
+            case "create":
+                ProjectFormDTO ??= new ProjectFormDTO();
+                break;
+            case "update":
+                Project? project;
+                project = await _projectRepository.GetProjectAsync(ProjectId);
+                if (project != null)
+                {
+                    ProjectFormDTO ??= _conversionService.ToProjectFormDTO(project);
+                }
+                break;
+        }
+    }
+
+    private async Task Submit()
+    {
+        if (ProjectFormDTO != null)
+        {
+            switch (Directive)
+            {
+                case "create":
+                    if (ProjectFormDTO.ImageFile != null)
+                    {
+                        ProjectFormDTO.PicturePath = await _fileModelService.UploadFile(ProjectFormDTO.ImageFile);
+                    }
+
+                    await _projectRepository.CreateProjectAsync(_conversionService.ToProject(ProjectFormDTO));
+                    break;
+                case "update":
+                    await _fileModelService.UpdateFile();
+                    await _projectRepository.UpdateProjectAsync(_conversionService.ToProject(ProjectFormDTO));
+                    break;
+            }
+        }
+
+        _navigationManager.NavigateTo("/recipes");
+    }
+}
