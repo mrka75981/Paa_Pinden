@@ -11,6 +11,8 @@
         <InputNumber @bind-Value="KnittingPostDTO.Id" hidden></InputNumber>
         <InputDate @bind-Value="KnittingPostDTO.TimeStamp" hidden></InputDate>
         <InputText @bind-Value="KnittingPostDTO.UserId" hidden></InputText>
+        <InputNumber @bind-Value="KnittingPostDTO.KnittingPostContent.Id" hidden></InputNumber>
+        <InputNumber @bind-Value="KnittingPostDTO.KnittingPostContent.KnittingPostId" hidden></InputNumber>
         <InputText @bind-Value="KnittingPostDTO.KnittingPostContent.Pictures[0].Path" hidden></InputText>
         <InputText @bind-Value="KnittingPostDTO.KnittingPostContent.Videos[0].Path" hidden></InputText>
 
@@ -77,11 +79,6 @@
             return;
         }
 
-        knittingPost.KnittingPostContent ??= new Content
-        {
-            Pictures = new List<ContentPicture>(),
-            Videos = new List<ContentVideo>()
-        };
 
         knittingPost.KnittingPostContent.Pictures ??= new List<ContentPicture>();
         knittingPost.KnittingPostContent.Videos ??= new List<ContentVideo>();
