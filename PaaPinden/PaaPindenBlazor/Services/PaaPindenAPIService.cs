@@ -69,7 +69,7 @@ namespace PaaPindenBlazor.Services
         public async Task DeleteProjectAsync(int projectid)
         {
             using var httpClient = _httpClientFactory.CreateClient("PaaPindenClient");
-            using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/KnittingPost/{projectid}");
+            using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/Project/{projectid}");
             using var response = await httpClient.SendAsync(request);
         }
 
@@ -113,7 +113,7 @@ namespace PaaPindenBlazor.Services
             return project;
         }
 
-        public async Task<List<Project>> GetUserProjectAsync(string userid)
+        public async Task<List<Project>> GetUserProjectsAsync(string userid)
         {
             using var httpClient = _httpClientFactory.CreateClient("PaaPindenClient");
             using var request = new HttpRequestMessage(HttpMethod.Get, $"api/Project/user/{userid}");

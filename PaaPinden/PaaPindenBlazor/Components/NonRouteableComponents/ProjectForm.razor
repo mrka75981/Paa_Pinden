@@ -5,7 +5,7 @@
 
 @if (ProjectFormDTO != null)
 {
-    <EditForm Model="ProjectFormDTO" enctype="multipart/form-data" FormName="ProjectFormDTO" OnValidSubmit="Submit">
+    <EditForm Model="ProjectFormDTO" enctype="multipart/form-data" FormName="ProjectForm" OnValidSubmit="Submit">
         <DataAnnotationsValidator/>
         <InputNumber @bind-Value="ProjectFormDTO.Id" hidden/>
         <div class="row mb-3">
@@ -21,7 +21,7 @@
         <InputHidden @bind-Value="ProjectFormDTO.PicturePath" />
         <div class="row mb-3">
             <label>ImageFile</label>
-            <InputFile name="RecipeDTO.ImageFile" />
+            <InputFile name="ProjectFormDTO.ImageFile" />
             <ValidationMessage For="() => ProjectFormDTO.ImageFile" />
         </div>
         <div class="row mb-3">
@@ -69,6 +69,10 @@
         {
             case "create":
                 ProjectFormDTO ??= new ProjectFormDTO();
+
+                //Until login is made the user is hardcoded
+                ProjectFormDTO.UserId = "84cd148c-e055-4d01-8a32-d06e7489e2a3";
+
                 break;
             case "update":
                 Project? project;
@@ -90,7 +94,7 @@
                 case "create":
                     if (ProjectFormDTO.ImageFile != null)
                     {
-                        ProjectFormDTO.PicturePath = await _fileModelService.UploadFile(ProjectFormDTO.ImageFile);
+                        ProjectFormDTO.PicturePath = await _fileModelService.UploadFileAsync(ProjectFormDTO.ImageFile);
                     }
 
                     await _paaPindenAPIService.CreateProjectAsync(_conversionService.ToProject(ProjectFormDTO));
@@ -100,11 +104,11 @@
                     {
                         if (ProjectFormDTO.PicturePath == null)
                         {
-                            ProjectFormDTO.PicturePath = await _fileModelService.UploadFile(ProjectFormDTO.ImageFile);
+                            ProjectFormDTO.PicturePath = await _fileModelService.UploadFileAsync(ProjectFormDTO.ImageFile);
                         }
                         else if (ProjectFormDTO.PicturePath != null)
                         {
-                            await _fileModelService.UpdateFile(ProjectFormDTO.ImageFile, ProjectFormDTO.PicturePath);
+                            await _fileModelService.UpdateFileAsync(ProjectFormDTO.ImageFile, ProjectFormDTO.PicturePath);
                         }
                     }
 

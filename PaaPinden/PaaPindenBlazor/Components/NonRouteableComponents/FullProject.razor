@@ -1,0 +1,38 @@
+﻿@inject IFileModelService _fileModelService
+@inject IPaaPindenAPIService _paaPindenAPIService
+@inject NavigationManager _navigationManager
+
+@if (project != null)
+{
+    <div class="col-md card">
+        <p>@project.Title</p>
+        <p>@project.Note</p>
+        <p>@project.Needle</p>
+        <p>@project.YarnType</p>
+        <p>@project.Recipe</p>
+        <p>@project.Round</p>
+        <p>@project.Stitch</p>
+
+        <img src="@filePath" />
+    </div>
+}
+
+@code {
+    private Project? project;
+    private string? filePath;
+
+    [Parameter]
+    public int ProjectId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        project ??= await _paaPindenAPIService.GetProjectAsync(ProjectId);
+        if (project != null)
+        {
+            if (project.PicturePath != null)
+            {
+                filePath = await _fileModelService.GetFilePathWithVersionAsync(project.PicturePath);
+            }
+        }
+    }
+}

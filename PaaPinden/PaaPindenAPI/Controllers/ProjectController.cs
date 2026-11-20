@@ -38,7 +38,7 @@ namespace PaaPindenAPI.Controllers
             return Ok();
         }
 
-        [HttpGet("/user/{userId}")]
+        [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetUserProjectsAsync(string userId)
         {
             if (userId == null)

@@ -15,10 +15,8 @@ namespace PaaPindenBlazor.Services
                 PicturePath = projectFormDTO.PicturePath,
                 UserId = projectFormDTO.UserId
             };
-
             if (projectFormDTO.Needle != null) 
                 project.Needle = projectFormDTO.Needle;
-            
             if (projectFormDTO.YarnType != null)
                 project.YarnType = projectFormDTO.YarnType;
             if (projectFormDTO.Recipe != null)
@@ -27,6 +25,11 @@ namespace PaaPindenBlazor.Services
                 project.Round = projectFormDTO.Round.Value;
             if (projectFormDTO.Stitch != null)
                 project.Stitch = projectFormDTO.Stitch.Value;
+
+            if (project.PicturePath.Length < 1)
+            {
+                project.PicturePath = null;
+            }
 
             return project;
         }

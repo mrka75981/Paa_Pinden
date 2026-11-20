@@ -1,0 +1,17 @@
+﻿@page "/projects"
+@inject IPaaPindenAPIService _paaPindenAPIService
+
+@if (projects != null)
+{
+    <ProjectCardList Projects="projects"/>
+}
+
+@code {
+    private List<Project>? projects;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //until login has been made, (and userid can be gotten from usermanager) it is hardcoded as "84cd148c-e055-4d01-8a32-d06e7489e2a3".
+        projects = await _paaPindenAPIService.GetUserProjectsAsync("84cd148c-e055-4d01-8a32-d06e7489e2a3");
+    }
+}

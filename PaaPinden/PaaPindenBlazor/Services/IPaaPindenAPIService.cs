@@ -24,7 +24,7 @@ namespace PaaPindenBlazor.Services
 
         Task<Project> GetProjectAsync(int id);
 
-        Task<List<Project>> GetUserProjectAsync(string userid);
+        Task<List<Project>> GetUserProjectsAsync(string userid);
 
         Task CreateProjectAsync(Project project);
 

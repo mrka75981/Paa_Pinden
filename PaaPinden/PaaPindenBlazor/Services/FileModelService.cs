@@ -10,15 +10,16 @@ namespace PaaPindenBlazor.Services
         private string _resultMessage = "";
 
         private string? _folderPath = "";
+        private string? _folderName = "images";
         private string? _filePath { get; set; } = "";
 
         public FileModelService(IWebHostEnvironment webHostEnvironment)
         {
             _webHostEnviroment = webHostEnvironment;
-            _folderPath = Path.Combine(_webHostEnviroment.ContentRootPath, "KnittingPostPictures");
+            _folderPath = Path.Combine(_webHostEnviroment.WebRootPath, _folderName);
         }
 
-        public void SetFilePath(IFormFile formFile)
+        private void SetFilePath(IFormFile formFile)
         {
             Directory.CreateDirectory(_folderPath);
 
@@ -38,7 +39,7 @@ namespace PaaPindenBlazor.Services
             _filePath = Path.Combine(_folderPath, $"{imageName}.{fileExtension}");
         }
 
-        public async Task<string> UploadFile(IFormFile formFile)
+        public async Task<string> UploadFileAsync(IFormFile formFile)
         {
             try
             {
@@ -63,15 +64,26 @@ namespace PaaPindenBlazor.Services
 
         }
 
-        public async Task UpdateFile(IFormFile formFile, string fileName)
+        public async Task UpdateFileAsync(IFormFile formFile, string filePath)
         {
             Directory.CreateDirectory(_folderPath);
 
-            _filePath = Path.Combine(_folderPath, fileName);
-
-            File.Delete(_filePath);
-            await using FileStream stream = new FileStream(_filePath, FileMode.Create);
+            File.Delete(filePath);
+            await using FileStream stream = new FileStream(filePath, FileMode.Create);
             await formFile.CopyToAsync(stream);
+        }
+
+        public async Task<string> GetFilePathWithVersionAsync(string filePath)
+        {
+            var version = File.GetLastWriteTimeUtc(filePath).Ticks;
+            string fileName = filePath.Split('\\').Last();
+            return $"/{_folderName}/{fileName}?v={version}";
+        }
+
+        public async Task DeleteFileAsync(string filePath)
+        {
+            Directory.CreateDirectory(_folderPath);
+            File.Delete(filePath);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿@page "/createpost"
-@using PaaPindenBlazor.NonRouteableComponents
 @inject IPaaPindenAPIService PaaPindenAPI
 @inject NavigationManager NavigationManager
 @inject IFileModelService FileModelService
@@ -67,7 +66,7 @@
 
     private async Task Submit()
     {
-        var filepath = await FileModelService.UploadFile(knittingPost.ImageFile);
+        var filepath = await FileModelService.UploadFileAsync(knittingPost.ImageFile);
         knittingPost.KnittingPostContent.Pictures[0].Path = filepath;
         await PaaPindenAPI.CreateKnittingPostAsync(new KnittingPostDTO
         {
