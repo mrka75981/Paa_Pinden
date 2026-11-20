@@ -19,6 +19,7 @@ namespace PaaPindenAPI
 
             builder.Services.AddScoped<ICommentRepository, CommentRepository>();
             builder.Services.AddScoped<IKnittingPostRepository, KnittingPostRepository>();
+            builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 
             builder.Services.AddDbContext<PaaPindenContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("default")));
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

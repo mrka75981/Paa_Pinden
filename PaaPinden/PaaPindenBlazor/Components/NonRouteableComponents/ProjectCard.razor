@@ -1,0 +1,61 @@
+﻿@inject IFileModelService _fileModelService
+@inject IPaaPindenAPIService _paaPindenAPIService
+@inject NavigationManager _navigationManager
+
+@if (Project != null)
+{
+    <div class="col-md card">
+        <div class="nav-scrollable">
+            <nav class="nav flex-column">
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="@($"projects/read/{Project.Id}")">
+                        <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Read
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="@($"projects/update/{Project.Id}")">
+                        <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Update
+                    </NavLink>
+                </div>
+            </nav>
+        </div>
+        <EditForm Model="Project" FormName="@($"{Project.Title}Form")" OnSubmit="Delete">
+            <button type="submit">Delete</button>
+        </EditForm>
+        <p>@Project.Title</p>
+
+        <img src="@filePath" />
+    </div>
+}
+
+@code {
+    [Parameter]
+    public Project? Project { get; set; }
+
+    private string? filePath;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Project != null)
+        {
+            if (Project.PicturePath != null)
+            {
+                filePath = await _fileModelService.GetFilePathWithVersionAsync(Project.PicturePath);
+            }
+        }
+    }
+
+    private async Task Delete()
+    {
+        if (Project != null)
+        {
+            if (Project.PicturePath != null)
+            {
+                await _fileModelService.DeleteFileAsync(Project.PicturePath);
+            }
+            await _paaPindenAPIService.DeleteProjectAsync(Project.Id);
+        }
+
+        _navigationManager.Refresh();
+    }
+}
