@@ -1,21 +1,14 @@
-﻿.post {
-    width: 50%;
-    height: 200px;
+﻿.headerstyle {
+    background-image: url("/assets/stitched-wool.png");
+    background-repeat: repeat;
+    background-size: 250%;
 }
 
-.postTitle {
-    display: flex;
-    justify-content: left;
+@font-face{
+    font-family: Sniglet;
+    src: url(/assets/Sniglet-Regular.ttf)
 }
 
-.postDesc {
-    color: gray;
-    display: flex;
-    justify-content: left;
-}
-
-.postImage {
-    width: 200px;
-    height: 200px;
-    margin: auto;
+.PindenFont{
+    font-family: Sniglet;
 }
