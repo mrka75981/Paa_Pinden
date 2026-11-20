@@ -10,7 +10,7 @@
         <ValidationSummary></ValidationSummary>
         <InputNumber @bind-Value="KnittingPostDTO.Id" hidden></InputNumber>
         <InputDate @bind-Value="KnittingPostDTO.TimeStamp" hidden></InputDate>
-        <InputText @bind-Value="KnittingPostDTO.Author" hidden></InputText>
+        <InputText @bind-Value="KnittingPostDTO.UserId" hidden></InputText>
         <InputText @bind-Value="KnittingPostDTO.KnittingPostContent.Pictures[0].Path" hidden></InputText>
         <InputText @bind-Value="KnittingPostDTO.KnittingPostContent.Videos[0].Path" hidden></InputText>
 
@@ -93,7 +93,7 @@
                 Id = knittingPost.Id,
                 Title = knittingPost.Title,
                 TimeStamp = knittingPost.TimeStamp,
-                Author = knittingPost.Author,
+                UserId = knittingPost.UserId,
                 KnittingPostContent = knittingPost.KnittingPostContent
             };
         }
