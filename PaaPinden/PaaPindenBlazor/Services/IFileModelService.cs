@@ -6,5 +6,6 @@ namespace PaaPindenBlazor.Services
     public interface IFileModelService
     {
         Task<string> UploadFile(IFormFile formFile);
+        Task UpdateFile(IFormFile formFile, string fileName);
     }
 }

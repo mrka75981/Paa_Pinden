@@ -1,7 +1,7 @@
 ﻿@inject NavigationManager _navigationManager
 @inject IConversionService _conversionService
 @inject IFileModelService _fileModelService
-@inject IProjectRepository _projectRepository
+@inject IPaaPindenAPIService _paaPindenAPIService
 
 @if (ProjectFormDTO != null)
 {
@@ -9,60 +9,49 @@
         <DataAnnotationsValidator/>
         <InputNumber @bind-Value="ProjectFormDTO.Id" hidden/>
         <div class="row mb-3">
-            <label>Name</label>
-            <InputText @bind-Value="ProjectFormDTO.Name" />
-            <ValidationMessage For="() => ProjectFormDTO.Name" />
+            <label>Title</label>
+            <InputText @bind-Value="ProjectFormDTO.Title" />
+            <ValidationMessage For="() => ProjectFormDTO.Title" />
         </div>
         <div class="row mb-3">
-            <label>Preptime</label>
-            <InputText @bind-Value="ProjectFormDTO.Preptime" />
-            <ValidationMessage For="() => ProjectFormDTO.Preptime" />
+            <label>Note</label>
+            <InputText @bind-Value="ProjectFormDTO.Note" />
+            <ValidationMessage For="() => ProjectFormDTO.Note" />
         </div>
-        <div class="row mb-3">
-            <label>Servings</label>
-            <InputNumber @bind-Value="ProjectFormDTO.Servings" />
-            <ValidationMessage For="() => ProjectFormDTO.Servings" />
-        </div>
-        <InputHidden @bind-Value="ProjectFormDTO.ImageName" />
-        <InputHidden @bind-Value="ProjectFormDTO.ImageExtension" />
+        <InputHidden @bind-Value="ProjectFormDTO.PicturePath" />
         <div class="row mb-3">
             <label>ImageFile</label>
             <InputFile name="RecipeDTO.ImageFile" />
             <ValidationMessage For="() => ProjectFormDTO.ImageFile" />
         </div>
         <div class="row mb-3">
-            <label>Description</label>
-            <InputText @bind-Value="ProjectFormDTO.Description" />
-            <ValidationMessage For="() => ProjectFormDTO.Description" />
+            <label>Needle</label>
+            <InputText @bind-Value="ProjectFormDTO.Needle" />
+            <ValidationMessage For="() => ProjectFormDTO.Needle" />
         </div>
         <div class="row mb-3">
-            <label>Ingredients</label>
-            <InputText @bind-Value="ProjectFormDTO.Ingredients" />
-            <ValidationMessage For="() => ProjectFormDTO.Ingredients" />
+            <label>YarnType</label>
+            <InputText @bind-Value="ProjectFormDTO.YarnType" />
+            <ValidationMessage For="() => ProjectFormDTO.YarnType" />
         </div>
         <div class="row mb-3">
-            <label>Instructions</label>
-            <InputText @bind-Value="ProjectFormDTO.Instructions" />
-            <ValidationMessage For="() => ProjectFormDTO.Instructions" />
+            <label>Recipe</label>
+            <InputText @bind-Value="ProjectFormDTO.Recipe" />
+            <ValidationMessage For="() => ProjectFormDTO.Recipe" />
         </div>
-
         <div class="row mb-3">
-            <label>CategoryId</label>
-            <InputSelect class="form-select" @bind-Value="ProjectFormDTO.CategoryId">
-                <option>-- Select --</option>
-                @if (categories != null)
-                {
-                    foreach (Category category in categories)
-                    {
-                        <option value="@category.Id">@category.Name</option>
-                    }
-                }
-            </InputSelect>
-            <ValidationMessage For="() => ProjectFormDTO.CategoryId" />
+            <label>Round</label>
+            <InputNumber @bind-Value="ProjectFormDTO.Round" />
+            <ValidationMessage For="() => ProjectFormDTO.Round" />
         </div>
-        <br />
+        <div class="row mb-3">
+            <label>Stitch</label>
+            <InputNumber @bind-Value="ProjectFormDTO.Stitch" />
+            <ValidationMessage For="() => ProjectFormDTO.Stitch" />
+        </div>
+        <InputHidden @bind-Value="ProjectFormDTO.UserId" />
         <button class="btn btn-primary" type="submit">@Directive</button>
-        <a href="/recipes" class="btn btn-primary">Close</a>
+        <a href="/projects" class="btn btn-primary">Close</a>
     </EditForm>
 }
 
@@ -83,7 +72,7 @@
                 break;
             case "update":
                 Project? project;
-                project = await _projectRepository.GetProjectAsync(ProjectId);
+                project = await _paaPindenAPIService.GetProjectAsync(ProjectId);
                 if (project != null)
                 {
                     ProjectFormDTO ??= _conversionService.ToProjectFormDTO(project);
@@ -104,15 +93,26 @@
                         ProjectFormDTO.PicturePath = await _fileModelService.UploadFile(ProjectFormDTO.ImageFile);
                     }
 
-                    await _projectRepository.CreateProjectAsync(_conversionService.ToProject(ProjectFormDTO));
+                    await _paaPindenAPIService.CreateProjectAsync(_conversionService.ToProject(ProjectFormDTO));
                     break;
                 case "update":
-                    await _fileModelService.UpdateFile();
-                    await _projectRepository.UpdateProjectAsync(_conversionService.ToProject(ProjectFormDTO));
+                    if (ProjectFormDTO.ImageFile != null)
+                    {
+                        if (ProjectFormDTO.PicturePath == null)
+                        {
+                            ProjectFormDTO.PicturePath = await _fileModelService.UploadFile(ProjectFormDTO.ImageFile);
+                        }
+                        else if (ProjectFormDTO.PicturePath != null)
+                        {
+                            await _fileModelService.UpdateFile(ProjectFormDTO.ImageFile, ProjectFormDTO.PicturePath);
+                        }
+                    }
+
+                    await _paaPindenAPIService.UpdateProjectAsync(_conversionService.ToProject(ProjectFormDTO));
                     break;
             }
         }
 
-        _navigationManager.NavigateTo("/recipes");
+        _navigationManager.NavigateTo("/projects");
     }
 }
