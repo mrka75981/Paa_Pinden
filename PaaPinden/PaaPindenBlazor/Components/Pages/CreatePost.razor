@@ -64,7 +64,6 @@
         }
     }
 
-
     private async Task Submit()
     {
         var filepath = await FileModelService.UploadFile(knittingPost.ImageFile);
@@ -96,5 +95,4 @@
         });
         NavigationManager.NavigateTo("/");
     }
-
 }

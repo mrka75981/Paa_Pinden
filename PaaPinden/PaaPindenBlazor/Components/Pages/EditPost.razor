@@ -3,62 +3,90 @@
 @inject NavigationManager NavigationManager
 <h3>EditPost</h3>
 
-<EditForm Model="KnittingPostDTO" FormName="FormKnittingPost" OnValidSubmit="Submit" method="put" enctype="multipart/form-data">
-    <DataAnnotationsValidator></DataAnnotationsValidator>
-    <ValidationSummary></ValidationSummary>
-    <InputNumber @bind-Value="knittingPost.Id" hidden></InputNumber>
-    <InputDate @bind-Value="knittingPost.TimeStamp" hidden></InputDate>
-    <InputText @bind-Value="knittingPost.Author" hidden></InputText>
+@if (knittingPost.Id != 0)
+{
+    <EditForm Model="KnittingPostDTO" FormName="FormKnittingPost" OnValidSubmit="Submit">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <ValidationSummary></ValidationSummary>
+        <InputNumber @bind-Value="KnittingPostDTO.Id" hidden></InputNumber>
+        <InputDate @bind-Value="KnittingPostDTO.TimeStamp" hidden></InputDate>
+        <InputText @bind-Value="KnittingPostDTO.Author" hidden></InputText>
+        <InputText @bind-Value="KnittingPostDTO.KnittingPostContent.Pictures[0].Path" hidden></InputText>
+        <InputText @bind-Value="KnittingPostDTO.KnittingPostContent.Videos[0].Path" hidden></InputText>
 
 
-    <div class="mb-3">
-        <div class="col-2">
-            <label class="col-form-label">Title</label>
-        </div>
-        <div class="col-6">
-            <InputText @bind-Value="KnittingPostDTO.Title" placeholder="KnittingPostDTO.Title" class="form-control"></InputText>
-        </div>
-        <div class="col">
-            <ValidationMessage For="() => KnittingPostDTO.Title"></ValidationMessage>
-        </div>
 
-        <div class="col-2">
-            <label class="col-form-label">Indhold</label>
-        </div>
-        <div class="col-6">
-            <InputFile name="knittingPost.ImageFile" accept="image/*" class="form-control" />
-        </div>
-        <div class="col-6">
-            <InputText @bind-Value="KnittingPostDTO.KnittingPostContent.Text" placeholder="KnittingPostDTO.KnittingPostContent.Text"
-            class="form-control"></InputText>
-        </div>
-        <div class="col">
-            <ValidationMessage For="() => KnittingPostDTO.KnittingPostContent.Text"></ValidationMessage>
-        </div>
-        <br />
-        <button class="btn btn-primary" type="submit">Save</button>
-        &nbsp;
-        <a href="/" class="btn btn-primary">Cancel</a>
-    </div>
-</EditForm>
+        <div class="mb-3">
+            <div class="col-2">
+                <label class="col-form-label">Title</label>
+            </div>
+            <div class="col-6">
+                <InputText @bind-Value="@(KnittingPostDTO.Title)" placeholder="@KnittingPostDTO.Title" class="form-control"></InputText>
+            </div>
+            <div class="col">
+                <ValidationMessage For="() => KnittingPostDTO.Title"></ValidationMessage>
+            </div>
 
-
+            <div class="col-2">
+                <label class="col-form-label">Indhold</label>
+            </div>
+            @* <div class="col-6">
+                <InputFile name="knittingPost.ImageFile" accept="image/*" class="form-control" />
+            </div> *@
+            <div class="col-6">
+                <InputText @bind-Value="@(KnittingPostDTO.KnittingPostContent.Text)" placeholder="@KnittingPostDTO.KnittingPostContent.Text"
+                           class="form-control"></InputText>
+            </div>
+            <div class="col">
+                <ValidationMessage For="() => KnittingPostDTO.KnittingPostContent.Text"></ValidationMessage>
+            </div>
+            <br />
+            <button class="btn btn-primary" type="submit">Save</button>
+            &nbsp;
+            <a href="/" class="btn btn-primary">Cancel</a>
+        </div>
+    </EditForm>
+} 
+@* else
+{
+    NavigationManager.NavigateTo("/NotFound");
+} *@
 
 @code {
     [Parameter]
     public int id { get; set; }
 
     [SupplyParameterFromForm(FormName = "FormKnittingPost")]
-    private KnittingPostDTO KnittingPostDTO { get; set; }
+    private KnittingPostDTO KnittingPostDTO { get; set; } = new()
+    {
+        KnittingPostContent = new Content
+        {
+            Pictures = new List<ContentPicture>(),
+            Videos = new List<ContentVideo>()
+        }
+    };
 
     private KnittingPost knittingPost = new();
 
 
-    protected override async Task OnParametersSetAsync()
+    protected async override Task OnInitializedAsync()
     {
-        knittingPost ??= await PaaPindenAPI.GetKnittingPostAsync(id);
+        knittingPost = await PaaPindenAPI.GetKnittingPostAsync(id);
+        if (knittingPost.Id == 0)
+        {
+            return;
+        }
 
-        if (knittingPost != null)
+        knittingPost.KnittingPostContent ??= new Content
+        {
+            Pictures = new List<ContentPicture>(),
+            Videos = new List<ContentVideo>()
+        };
+
+        knittingPost.KnittingPostContent.Pictures ??= new List<ContentPicture>();
+        knittingPost.KnittingPostContent.Videos ??= new List<ContentVideo>();
+
+        if (KnittingPostDTO.Id == 0)
         {
             KnittingPostDTO = new KnittingPostDTO
             {
@@ -66,35 +94,19 @@
                 Title = knittingPost.Title,
                 TimeStamp = knittingPost.TimeStamp,
                 Author = knittingPost.Author,
-                KnittingPostContent = new Content
-            {
-                 Text = knittingPost.KnittingPostContent.Text
-                // Pictures = new List<ContentPicture>()
-                // {
-                //     new ContentPicture
-                //     {
-                //         Path = knittingPost.KnittingPostContent.Pictures[0].Path
-                //     }
-                // },
-                // Videos = new List<ContentVideo>()
-                //     {
-                //         new ContentVideo
-                //         {
-                //             Path = knittingPost.KnittingPostContent.Videos[0].Path
-                //         }
-                //     }
-            }
-
+                KnittingPostContent = knittingPost.KnittingPostContent
             };
         }
-
-
     }
+
 
     private async Task Submit()
     {
+        
         await PaaPindenAPI.UpdateKnittingPostAsync(KnittingPostDTO);
         NavigationManager.NavigateTo("/");
     }
 
-}
+} 
+
+

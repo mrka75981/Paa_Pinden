@@ -98,7 +98,7 @@ namespace PaaPindenBlazor.Services
 
         public async Task UpdateKnittingPostAsync(KnittingPostDTO knittingPostDTO)
         {
-            using var httpClient = _httpClientFactory.CreateClient("DeepDiveApi");
+            using var httpClient = _httpClientFactory.CreateClient("PaaPindenClient");
             var productjson = JsonSerializer.Serialize(knittingPostDTO);
             using var request = new HttpRequestMessage(HttpMethod.Put, $"api/KnittingPost");
             request.Content = new StringContent(
@@ -107,6 +107,7 @@ namespace PaaPindenBlazor.Services
                 "application/json");
 
             using var response = await httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
         }
     }
 }
