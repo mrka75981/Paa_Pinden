@@ -392,7 +392,7 @@ namespace PaaPindenAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Project");
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
