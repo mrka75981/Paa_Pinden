@@ -12,7 +12,7 @@ using PaaPindenAPI.Data;
 namespace PaaPindenAPI.Migrations
 {
     [DbContext(typeof(PaaPindenContext))]
-    [Migration("20261119141658_init")]
+    [Migration("20261120112132_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -395,7 +395,7 @@ namespace PaaPindenAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Project");
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

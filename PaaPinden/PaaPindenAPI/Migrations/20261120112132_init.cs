@@ -178,7 +178,7 @@ namespace PaaPindenAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Project",
+                name: "Projects",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -195,9 +195,9 @@ namespace PaaPindenAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Project", x => x.Id);
+                    table.PrimaryKey("PK_Projects", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Project_AspNetUsers_UserId",
+                        name: "FK_Projects_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -363,8 +363,8 @@ namespace PaaPindenAPI.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Project_UserId",
-                table: "Project",
+                name: "IX_Projects_UserId",
+                table: "Projects",
                 column: "UserId");
         }
 
@@ -396,7 +396,7 @@ namespace PaaPindenAPI.Migrations
                 name: "ContentVideos");
 
             migrationBuilder.DropTable(
-                name: "Project");
+                name: "Projects");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
