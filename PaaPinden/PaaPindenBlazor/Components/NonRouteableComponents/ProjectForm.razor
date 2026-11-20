@@ -102,7 +102,7 @@
                 case "update":
                     if (ProjectFormDTO.ImageFile != null)
                     {
-                        if (ProjectFormDTO.PicturePath == null)
+                        if (_conversionService.ToProject(ProjectFormDTO).PicturePath == null)
                         {
                             ProjectFormDTO.PicturePath = await _fileModelService.UploadFileAsync(ProjectFormDTO.ImageFile);
                         }

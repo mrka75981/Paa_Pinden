@@ -18,7 +18,7 @@ namespace Tests
         private PaaPindenContext? _paaPindenContextForInit;
         private PaaPindenContext? _paaPindenContextForRepo;
         private KnittingPost? _testMethodKnittingPost;
-        private KnittingPostDTO _testMethodKnittingPostDTO;
+        private KnittingPostDTO? _testMethodKnittingPostDTO;
         private KnittingPost? _testInitializeKnittingPost;
         private KnittingPostDTO? _testInitializeKnittingPostDTO;
 
@@ -47,7 +47,7 @@ namespace Tests
                     Id = _testMethodKnittingPost.Id,
                     Title = _testMethodKnittingPost.Title,
                     TimeStamp = _testMethodKnittingPost.TimeStamp,
-                    Author = _testMethodKnittingPost.Author,
+                    UserId = _testMethodKnittingPost.UserId,
                     KnittingPostContent = _testMethodKnittingPost.KnittingPostContent
                 };
             }
@@ -59,7 +59,7 @@ namespace Tests
                     Id = _testInitializeKnittingPost.Id,
                     Title = _testInitializeKnittingPost.Title,
                     TimeStamp = _testInitializeKnittingPost.TimeStamp,
-                    Author = _testInitializeKnittingPost.Author,
+                    UserId = _testInitializeKnittingPost.UserId,
                     KnittingPostContent = _testInitializeKnittingPost.KnittingPostContent
                 };
             }
@@ -75,7 +75,7 @@ namespace Tests
             {
                 Title = "test opslag",
                 TimeStamp = DateTime.Today,
-                Author = "Jens",
+                UserId = "84cd148c-e055-4d01-8a32-d06e7489e2a3",
                 KnittingPostContent = new Content
                 {
                     Text = "Mit første opslag!",
@@ -83,7 +83,7 @@ namespace Tests
                     {
                         new ContentPicture
                         {
-                            Path = "~/path/to/testpicture"
+                            Path = "C:\\repositories\\Paa_Pinden\\PaaPinden\\PaaPindenBlazor\\wwwroot\\images\\test1.png"
                         }
                     },
                     Videos = new List<ContentVideo>()
@@ -99,13 +99,13 @@ namespace Tests
             {
                 Title = "Første opslag",
                 TimeStamp = DateTime.Today,
-                Author = "Jens",
+                UserId = "84cd148c-e055-4d01-8a32-d06e7489e2a3",
                 Comments = new List<Comment>()
                 {
                     new Comment
                     {
                         Text = "første kommentar",
-                        Writer = "jens fjende",
+                        UserId = "84cd148c-e055-4d01-8a32-d06e7489e2a3",
                         TimeStamp = DateTime.Today
                     }
                 },
@@ -116,7 +116,7 @@ namespace Tests
                     {
                         new ContentPicture
                         {
-                            Path = "~/path/to/picture"
+                            Path = "C:\\repositories\\Paa_Pinden\\PaaPinden\\PaaPindenBlazor\\wwwroot\\images\\test2.png"
                         }
                     },
                     Videos = new List<ContentVideo>()
@@ -175,7 +175,7 @@ namespace Tests
             Assert.AreEqual(expectedResult.Id, actualResult.Id);
             Assert.AreEqual(expectedResult.Title, actualResult.Title);
             Assert.AreEqual(expectedResult.TimeStamp, actualResult.TimeStamp);
-            Assert.AreEqual(expectedResult.Author, actualResult.Author);
+            Assert.AreEqual(expectedResult.UserId, actualResult.UserId);
 
             Assert.IsTrue(actualResult.Comments.Select(c => c.Id).All(c => expectedResult.Comments.Select(c => c.Id).Contains(c))); //All actualResults members are contained within expectedResults. 
             Assert.HasCount(expectedResult.Comments.Count, actualResult.Comments); //expectedResults do not have more members than actualResults (rendering the prior assertion incomplete). 

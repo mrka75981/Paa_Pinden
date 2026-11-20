@@ -29,7 +29,7 @@ namespace Tests
             {
                 Title = "Første opslag",
                 TimeStamp = DateTime.Today,
-                Author = "Jens",
+                UserId = "84cd148c-e055-4d01-8a32-d06e7489e2a3",
                 KnittingPostContent = new Content
                 {
                     Text = "Mit første opslag!",
@@ -37,7 +37,7 @@ namespace Tests
                     {
                         new ContentPicture
                         {
-                            Path = "~/path/to/picture"
+                            Path = "C:\\repositories\\Paa_Pinden\\PaaPinden\\PaaPindenBlazor\\wwwroot\\images\\test1.png"
                         }
                     },
                     Videos = new List<ContentVideo>()
@@ -54,14 +54,14 @@ namespace Tests
             {
                 CommentKnittingPostId = _testInitializeKnittingPost.Id,
                 Text = "test kommentar",
-                Writer = "jens fjende",
+                UserId = "84cd148c-e055-4d01-8a32-d06e7489e2a3",
                 TimeStamp = DateTime.Today
             };
             _testInitializeComment = new Comment()
             {
                 CommentKnittingPostId = _testInitializeKnittingPost.Id,
                 Text = "første kommentar",
-                Writer = "jens fjende",
+                UserId = "84cd148c-e055-4d01-8a32-d06e7489e2a3",
                 TimeStamp = DateTime.Today
             };
 
@@ -107,7 +107,7 @@ namespace Tests
             var actualResult = _paaPindenContextForRepo.Comments.Where(c => c.Id == _testInitializeComment.Id).FirstOrDefault();
             Assert.AreEqual(expectedResult.Text, actualResult.Text);
             Assert.AreEqual(expectedResult.TimeStamp, actualResult.TimeStamp);
-            Assert.AreEqual(expectedResult.Writer, actualResult.Writer);
+            Assert.AreEqual(expectedResult.UserId, actualResult.UserId);
             Assert.AreEqual(expectedResult.CommentKnittingPostId, actualResult.CommentKnittingPostId);
         }
 
