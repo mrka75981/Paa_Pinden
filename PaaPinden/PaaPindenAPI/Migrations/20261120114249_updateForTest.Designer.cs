@@ -12,8 +12,8 @@ using PaaPindenAPI.Data;
 namespace PaaPindenAPI.Migrations
 {
     [DbContext(typeof(PaaPindenContext))]
-    [Migration("20261119141658_init")]
-    partial class init
+    [Migration("20261120114249_updateForTest")]
+    partial class updateForTest
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -395,7 +395,7 @@ namespace PaaPindenAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Project");
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
