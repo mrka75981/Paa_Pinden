@@ -27,7 +27,7 @@ namespace PaaPindenAPI.Controllers
             }
             KnittingPost knittingPost = new KnittingPost()
             {
-                Author = knittingPostDTO.Author,
+                UserId = knittingPostDTO.UserId,
                 KnittingPostContent = knittingPostDTO.KnittingPostContent,
                 TimeStamp = knittingPostDTO.TimeStamp,
                 Title = knittingPostDTO.Title,
