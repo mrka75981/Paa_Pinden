@@ -45,9 +45,17 @@
             <br />
             <button class="btn btn-primary" type="submit">Save</button>
             &nbsp;
-            <a href="/" class="btn btn-primary">Cancel</a>
+            <a href="/" class="btn btn-primary">Cancel</a> 
+        </div>
+    </EditForm> 
+
+    <EditForm Model="KnittingPostDTO" FormName="DeletePostForm" OnValidSubmit="DeletePost" >
+        <div class="mb-3">
+            <button class="btn btn-danger" type="submit">Delete</button>
         </div>
     </EditForm>
+
+    
 } 
 @* else
 {
@@ -99,8 +107,14 @@
 
     private async Task Submit()
     {
-        
+
         await PaaPindenAPI.UpdateKnittingPostAsync(KnittingPostDTO);
+        NavigationManager.NavigateTo("/");
+    }
+
+    private async Task DeletePost()
+    {
+        await PaaPindenAPI.DeleteKnittingPostAsync(KnittingPostDTO.Id);
         NavigationManager.NavigateTo("/");
     }
 
