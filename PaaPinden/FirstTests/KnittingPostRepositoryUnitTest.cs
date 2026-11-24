@@ -10,6 +10,7 @@ namespace Tests
     {
         private PaaPindenContext? _paaPindenContextForRepo;
         private PaaPindenContext? _paaPindenContextForInit;
+        private User? _testInitializeUser;
         private IKnittingPostRepository? _testMethodRepo;
         private KnittingPost? _testMethodKnittingPost;
         private KnittingPost? _testInitializeKnittingPost;
@@ -21,6 +22,24 @@ namespace Tests
                 .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=PaaPindenDb;Integrated Security=true;Encrypt=true;Trust Server Certificate=True").Options);
             _paaPindenContextForInit = new PaaPindenContext(new DbContextOptionsBuilder<PaaPindenContext>()
                 .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=PaaPindenDb;Integrated Security=true;Encrypt=true;Trust Server Certificate=True").Options);
+            _testInitializeUser = new User()
+            {
+                Id = "84cd148c-e055-4d01-8a32-d06e7489e2a3",
+                UserName = "test",
+                NormalizedUserName = "TEST",
+                Email = "test@test.test",
+                NormalizedEmail = "TEST@TEST.TEST",
+                EmailConfirmed = true,
+                PasswordHash = "AQAAAAIAAYagAAAAEDU5ss3/xPgY9SmYXgjbzqrnwgKE4cQpHkYP+zu0cfUKVes0+fsTo/Y1micgg+lFrQ==",
+                SecurityStamp = "E6PKSVRQKLTX6JM23QOOG7NSEMZAT47O",
+                ConcurrencyStamp = "451190ea-b605-4320-980a-6b863f169b73",
+                PhoneNumber = null,
+                PhoneNumberConfirmed = false,
+                TwoFactorEnabled = false,
+                LockoutEnd = null,
+                LockoutEnabled = true,
+                AccessFailedCount = 0
+            };
             _testMethodRepo = new KnittingPostRepository(_paaPindenContextForRepo);
             _testMethodKnittingPost = new KnittingPost
             {
@@ -82,7 +101,11 @@ namespace Tests
 
             _paaPindenContextForInit.Database.EnsureDeleted();
             _paaPindenContextForInit.Database.EnsureCreated();
+            _paaPindenContextForInit.Users.RemoveRange(_paaPindenContextForInit.Users.AsNoTracking());
+            _paaPindenContextForInit.SaveChanges();
             _paaPindenContextForInit.KnittingPosts.RemoveRange(_paaPindenContextForInit.KnittingPosts.AsNoTracking());
+            _paaPindenContextForInit.SaveChanges();
+            _paaPindenContextForInit.Users.Add(_testInitializeUser);
             _paaPindenContextForInit.SaveChanges();
             _paaPindenContextForInit.KnittingPosts.Add(_testInitializeKnittingPost);
             _paaPindenContextForInit.SaveChanges();

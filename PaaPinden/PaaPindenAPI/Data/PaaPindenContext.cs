@@ -43,7 +43,7 @@ namespace PaaPindenAPI.Data
                     LockoutEnd = null,
                     LockoutEnabled = true,
                     AccessFailedCount = 0
-                },
+                }
             };
             modelbuilder.Entity<User>().HasData(users);
 
