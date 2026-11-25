@@ -50,12 +50,14 @@
             <ValidationMessage For="() => ProjectFormDTO.Stitch" />
         </div>
         <InputHidden @bind-Value="ProjectFormDTO.UserId" />
-        <button class="btn btn-primary" type="submit">@Directive</button>
-        <a href="/projects" class="btn btn-primary">Close</a>
+        <button class="btn btn-primary" type="submit">@_submitButtonName</button>
+        <a href="/projects" class="btn btn-primary">Annuller</a>
     </EditForm>
 }
 
 @code {
+    private string? _submitButtonName;
+
     [Parameter]
     public string? Directive { get; set; }
     [Parameter]
@@ -68,6 +70,7 @@
         switch (Directive)
         {
             case "create":
+                _submitButtonName = "Opret";
                 ProjectFormDTO ??= new ProjectFormDTO();
 
                 //Until login is made the user is hardcoded
@@ -75,6 +78,7 @@
 
                 break;
             case "update":
+                _submitButtonName = "Opdater";
                 Project? project;
                 project = await _paaPindenAPIService.GetProjectAsync(ProjectId);
                 if (project != null)
