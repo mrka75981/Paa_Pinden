@@ -111,92 +111,92 @@ namespace Tests
             _paaPindenContextForInit.SaveChanges();
         }
 
-        //[TestMethod]
-        //public async Task CreateKnittingPostAsync_Test()
-        //{
-        //    // Arrange
-        //    var expectedResult = _testMethodKnittingPost;
+        [TestMethod]
+        public async Task CreateKnittingPostAsync_Test()
+        {
+            // Arrange
+            var expectedResult = _testMethodKnittingPost;
 
-        //    // Act
-        //    await _testMethodRepo.CreateKnittingPostAsync(_testMethodKnittingPost);
-
-        //    // Assert
-        //    var actualResult = _paaPindenContextForRepo.KnittingPosts.Where( kp => kp.Id == _testMethodKnittingPost.Id).FirstOrDefault();
-        //    Assert.AreEqual(expectedResult.Id, actualResult.Id);
-        //}
-
-        //[TestMethod]
-        //public async Task GetKnittingPostAsync_Test()
-        //{
-        //    // Arrange
-        //    var expectedResult = _testInitializeKnittingPost;
-
-        //    // Act
-        //    var actualResult = await _testMethodRepo.GetKnittingPostAsync(_testInitializeKnittingPost.Id);
+            // Act
+            await _testMethodRepo.CreateKnittingPostAsync(_testMethodKnittingPost);
 
             // Assert
+            var actualResult = _paaPindenContextForRepo.KnittingPosts.Where(kp => kp.Id == _testMethodKnittingPost.Id).FirstOrDefault();
+            Assert.AreEqual(expectedResult.Id, actualResult.Id);
+        }
+
+        [TestMethod]
+        public async Task GetKnittingPostAsync_Test()
+        {
+            // Arrange
+            var expectedResult = _testInitializeKnittingPost;
+
+            // Act
+            var actualResult = await _testMethodRepo.GetKnittingPostAsync(_testInitializeKnittingPost.Id);
+
+            //Assert
             Assert.AreEqual(expectedResult.Id, actualResult.Id);
             Assert.AreEqual(expectedResult.Title, actualResult.Title);
             Assert.AreEqual(expectedResult.TimeStamp, actualResult.TimeStamp);
             Assert.AreEqual(expectedResult.UserId, actualResult.UserId);
 
-        //    Assert.IsTrue(actualResult.Comments.Select(c => c.Id).All(c => expectedResult.Comments.Select(c => c.Id).Contains(c))); //All actualResults members are contained within expectedResults. 
-        //    Assert.HasCount(expectedResult.Comments.Count, actualResult.Comments); //expectedResults do not have more members than actualResults (rendering the prior assertion incomplete). 
+            Assert.IsTrue(actualResult.Comments.Select(c => c.Id).All(c => expectedResult.Comments.Select(c => c.Id).Contains(c))); //All actualResults members are contained within expectedResults. 
+            Assert.HasCount(expectedResult.Comments.Count, actualResult.Comments); //expectedResults do not have more members than actualResults (rendering the prior assertion incomplete). 
 
-        //    Assert.AreEqual(expectedResult.KnittingPostContent.Id, actualResult.KnittingPostContent.Id);
-        //    Assert.AreEqual(expectedResult.KnittingPostContent.Text, actualResult.KnittingPostContent.Text);
+            Assert.AreEqual(expectedResult.KnittingPostContent.Id, actualResult.KnittingPostContent.Id);
+            Assert.AreEqual(expectedResult.KnittingPostContent.Text, actualResult.KnittingPostContent.Text);
 
-        //    Assert.IsTrue(actualResult.KnittingPostContent.Pictures.Select(p => p.Path).All(p => expectedResult.KnittingPostContent.Pictures.Select(p => p.Path).Contains(p))); //All actualResults members are contained within expectedResults. 
-        //    Assert.HasCount(expectedResult.KnittingPostContent.Pictures.Count, actualResult.KnittingPostContent.Pictures); //expectedResults do not have more members than actualResults (rendering the prior assertion incomplete). 
+            Assert.IsTrue(actualResult.KnittingPostContent.Pictures.Select(p => p.Path).All(p => expectedResult.KnittingPostContent.Pictures.Select(p => p.Path).Contains(p))); //All actualResults members are contained within expectedResults. 
+            Assert.HasCount(expectedResult.KnittingPostContent.Pictures.Count, actualResult.KnittingPostContent.Pictures); //expectedResults do not have more members than actualResults (rendering the prior assertion incomplete). 
 
-        //    Assert.IsTrue(actualResult.KnittingPostContent.Videos.Select(p => p.Path).All(p => expectedResult.KnittingPostContent.Videos.Select(p => p.Path).Contains(p))); //All actualResults members are contained within expectedResults. 
-        //    Assert.HasCount(expectedResult.KnittingPostContent.Videos.Count, actualResult.KnittingPostContent.Videos); //expectedResults do not have more members than actualResults (rendering the prior assertion incomplete). 
-        //}
+            Assert.IsTrue(actualResult.KnittingPostContent.Videos.Select(p => p.Path).All(p => expectedResult.KnittingPostContent.Videos.Select(p => p.Path).Contains(p))); //All actualResults members are contained within expectedResults. 
+            Assert.HasCount(expectedResult.KnittingPostContent.Videos.Count, actualResult.KnittingPostContent.Videos); //expectedResults do not have more members than actualResults (rendering the prior assertion incomplete). 
+        }
 
-        //[TestMethod]
-        //public async Task GetAllKnittingPostsAsync_Test()
-        //{
-        //    // Arrange
-        //    List<KnittingPost> expectedResults = new List<KnittingPost>() { _testInitializeKnittingPost };
+        [TestMethod]
+        public async Task GetAllKnittingPostsAsync_Test()
+        {
+            // Arrange
+            List<KnittingPost> expectedResults = new List<KnittingPost>() { _testInitializeKnittingPost };
 
-        //    // Act
-        //    var actualResults = await _testMethodRepo.GetAllKnittingPostAsync();
+            // Act
+            var actualResults = await _testMethodRepo.GetAllKnittingPostAsync();
 
-        //    // Assert
-        //    Assert.IsTrue(actualResults.Select(kp => kp.Id).All(kp => expectedResults.Select(kp => kp.Id).Contains(kp))); //All actualResults members are contained within expectedResults. 
-        //    Assert.HasCount(expectedResults.Count, actualResults); //expectedResults do not have more members than actualResults (rendering the prior assertion incomplete). 
-        //}
+            // Assert
+            Assert.IsTrue(actualResults.Select(kp => kp.Id).All(kp => expectedResults.Select(kp => kp.Id).Contains(kp))); //All actualResults members are contained within expectedResults. 
+            Assert.HasCount(expectedResults.Count, actualResults); //expectedResults do not have more members than actualResults (rendering the prior assertion incomplete). 
+        }
 
-        //[TestMethod]
-        //public async Task DeleteKnittingPostAsync_Test()
-        //{
-        //    // Arrange
-        //    int testInitializeKnittingPostId = _testInitializeKnittingPost.Id;
-        //    KnittingPost? expectedResult = null;
+        [TestMethod]
+        public async Task DeleteKnittingPostAsync_Test()
+        {
+            // Arrange
+            int testInitializeKnittingPostId = _testInitializeKnittingPost.Id;
+            KnittingPost? expectedResult = null;
 
-        //    // Act
-        //    await _testMethodRepo.DeleteKnittingPostAsync(_testInitializeKnittingPost.Id);
+            // Act
+            await _testMethodRepo.DeleteKnittingPostAsync(_testInitializeKnittingPost.Id);
 
-        //    // Assert
-        //    var actualResult = _paaPindenContextForRepo.KnittingPosts.Where(kp => kp.Id == testInitializeKnittingPostId).FirstOrDefault(); //FirstOrDefault surely returns null if the list is empty
-        //    Assert.AreEqual(expectedResult, actualResult);
+            // Assert
+            var actualResult = _paaPindenContextForRepo.KnittingPosts.Where(kp => kp.Id == testInitializeKnittingPostId).FirstOrDefault(); //FirstOrDefault surely returns null if the list is empty
+            Assert.AreEqual(expectedResult, actualResult);
 
-        //}
+        }
 
-        //public async Task UpdateKnittingPostAsync_Test()
-        //{
-        //    // Arrange
-        //    _testInitializeKnittingPost.Title = "edited title";
-        //    _testInitializeKnittingPost.KnittingPostContent.Pictures[0].Path = "~/path/to/editedpicture";
-        //    _testInitializeKnittingPost.KnittingPostContent.Videos[0].Path = "~/path/to/editedvideo";
-        //    var expectedResult = _testInitializeKnittingPost;
+        public async Task UpdateKnittingPostAsync_Test()
+        {
+            // Arrange
+            _testInitializeKnittingPost.Title = "edited title";
+            _testInitializeKnittingPost.KnittingPostContent.Pictures[0].Path = "~/path/to/editedpicture";
+            _testInitializeKnittingPost.KnittingPostContent.Videos[0].Path = "~/path/to/editedvideo";
+            var expectedResult = _testInitializeKnittingPost;
 
-        //    // Act
-        //    await _testMethodRepo.UpdateKnittingPostAsync(_testInitializeKnittingPost);
+            // Act
+            await _testMethodRepo.UpdateKnittingPostAsync(_testInitializeKnittingPost);
 
-        //    // Assert
-        //    var actualResult = _paaPindenContextForRepo.KnittingPosts.Where(kp => kp.Id == _testInitializeKnittingPost.Id).FirstOrDefault();
-        //    Assert.AreEqual(expectedResult, actualResult);
-        //}
+            // Assert
+            var actualResult = _paaPindenContextForRepo.KnittingPosts.Where(kp => kp.Id == _testInitializeKnittingPost.Id).FirstOrDefault();
+            Assert.AreEqual(expectedResult, actualResult);
+        }
     }
 }

@@ -141,31 +141,31 @@ namespace Tests
             _paaPindenContextForInit.KnittingPosts.Add(_testInitializeKnittingPost);
             _paaPindenContextForInit.SaveChanges();
 
-        //    _testInitializeComment.CommentKnittingPostId = _testInitializeKnittingPost.Id;
-        //    _testMethodComment.CommentKnittingPostId = _testInitializeKnittingPost.Id;
+            _testInitializeComment.CommentKnittingPostId = _testInitializeKnittingPost.Id;
+            _testMethodComment.CommentKnittingPostId = _testInitializeKnittingPost.Id;
 
-        //    _paaPindenContextForInit.Comments.Add(_testInitializeComment);
-        //    _paaPindenContextForInit.SaveChanges();
-        //}
+            _paaPindenContextForInit.Comments.Add(_testInitializeComment);
+            _paaPindenContextForInit.SaveChanges();
+        }
 
-        //[TestCleanup]
-        //public void Cleanup()
-        //{
-        //    if (_provider != null)
-        //    {
-        //        _provider.Dispose();
-        //    }
-        //}
+        [TestCleanup]
+        public void Cleanup()
+        {
+            if (_provider != null)
+            {
+                _provider.Dispose();
+            }
+        }
 
-        //[TestMethod]
-        //public async Task CreateCommentAsync_Test()
-        //{
-        //    // Arrange
-        //    _testMethodComment.Id = 2; //it will be assigned two given the state of the board. 
-        //    var expectedResult = _testMethodComment;
+        [TestMethod]
+        public async Task CreateCommentAsync_Test()
+        {
+            // Arrange
+            _testMethodComment.Id = 2; //it will be assigned two given the state of the board. 
+            var expectedResult = _testMethodComment;
 
-        //    // Act
-        //    await _paaPindenAPIService.CreateCommentAsync(_testMethodCommentDTO);
+            // Act
+            await _paaPindenAPIService.CreateCommentAsync(_testMethodCommentDTO);
 
             // Assert
             var actualResult = _paaPindenContextForRepo.Comments.Where(c => c.Id == _testMethodComment.Id).FirstOrDefault();
@@ -175,18 +175,18 @@ namespace Tests
             Assert.AreEqual(expectedResult.UserId, actualResult.UserId);
         }
 
-        //[TestMethod]
-        //public async Task UpdateCommentAsync_Test()
-        //{
-        //    // Arrange
-        //    _testInitializeComment.Text = "ændret kommentar";
-        //    _testInitializeCommentDTO.Text = "ændret kommentar";
-        //    var expectedResult = _testInitializeComment;
+        [TestMethod]
+        public async Task UpdateCommentAsync_Test()
+        {
+            // Arrange
+            _testInitializeComment.Text = "ændret kommentar";
+            _testInitializeCommentDTO.Text = "ændret kommentar";
+            var expectedResult = _testInitializeComment;
 
-        //    // Act
-        //    await _paaPindenAPIService.UpdateCommentAsync(_testInitializeCommentDTO);
+            // Act
+            await _paaPindenAPIService.UpdateCommentAsync(_testInitializeCommentDTO);
 
-            // Assert
+            //Assert
             var actualResult = _paaPindenContextForRepo.Comments.Where(c => c.Id == _testInitializeComment.Id).FirstOrDefault();
             Assert.AreEqual(expectedResult.Text, actualResult.Text);
             Assert.AreEqual(expectedResult.TimeStamp, actualResult.TimeStamp);
@@ -194,33 +194,33 @@ namespace Tests
             Assert.AreEqual(expectedResult.CommentKnittingPostId, actualResult.CommentKnittingPostId);
         }
 
-        //[TestMethod]
-        //public async Task GetAllPostCommentsAsync_Test()
-        //{
-        //    // Arrange
-        //    List<Comment> expectedResults = new List<Comment>() { _testInitializeComment };
+        [TestMethod]
+        public async Task GetAllPostCommentsAsync_Test()
+        {
+            // Arrange
+            List<Comment> expectedResults = new List<Comment>() { _testInitializeComment };
 
-        //    // Act
-        //    List<Comment> actualResults = await _paaPindenAPIService.GetAllPostCommentsAsync(_testInitializeComment.CommentKnittingPostId);
+            // Act
+            List<Comment> actualResults = await _paaPindenAPIService.GetAllPostCommentsAsync(_testInitializeComment.CommentKnittingPostId);
 
-        //    // Assert
-        //    Assert.IsTrue(actualResults.Select(c => c.Id).All(c => expectedResults.Select(c => c.Id).Contains(c))); //All actualResults members are contained within expectedResults. 
-        //    Assert.HasCount(expectedResults.Count, actualResults); //expectedResults do not have more members than actualResults (rendering the prior assertion incomplete). 
-        //}
+            // Assert
+            Assert.IsTrue(actualResults.Select(c => c.Id).All(c => expectedResults.Select(c => c.Id).Contains(c))); //All actualResults members are contained within expectedResults. 
+            Assert.HasCount(expectedResults.Count, actualResults); //expectedResults do not have more members than actualResults (rendering the prior assertion incomplete). 
+        }
 
-        //[TestMethod]
-        //public async Task DeleteCommentAsync_Test()
-        //{
-        //    // Arrange
-        //    int testInitializeCommentId = _testInitializeComment.Id;
-        //    Comment? expectedResult = null;
+        [TestMethod]
+        public async Task DeleteCommentAsync_Test()
+        {
+            // Arrange
+            int testInitializeCommentId = _testInitializeComment.Id;
+            Comment? expectedResult = null;
 
-        //    // Act
-        //    await _paaPindenAPIService.DeleteCommentAsync(_testInitializeComment.Id);
+            // Act
+            await _paaPindenAPIService.DeleteCommentAsync(_testInitializeComment.Id);
 
-        //    // Assert
-        //    var actualResult = _paaPindenContextForRepo.Comments.Where(c => c.Id == testInitializeCommentId).FirstOrDefault(); //FirstOrDefault surely returns null if the list is empty
-        //    Assert.AreEqual(expectedResult, actualResult);
-        //}
+            // Assert
+            var actualResult = _paaPindenContextForRepo.Comments.Where(c => c.Id == testInitializeCommentId).FirstOrDefault(); //FirstOrDefault surely returns null if the list is empty
+            Assert.AreEqual(expectedResult, actualResult);
+        }
     }
 }
