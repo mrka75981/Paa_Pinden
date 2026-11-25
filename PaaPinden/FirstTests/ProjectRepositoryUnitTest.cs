@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using PaaPindenAPI.Data;
 using PaaPindenAPI.Repositories;
+using PaaPindenBlazor.Services;
 using Shared.Models;
 
 namespace Tests;
@@ -15,33 +17,32 @@ public sealed class ProjectRepositoryUnitTest
     [TestInitialize]
     public async Task Init()
     {
-        testProjectRepo = new ProjectRepository(paaPindenContext!);
-
         var options = new DbContextOptionsBuilder<PaaPindenContext>()
             .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=PaaPindenDb;Integrated Security=true;Encrypt=true;Trust Server Certificate=True")
             .Options;
-        using (paaPindenContext = new PaaPindenContext(options))
+
+        paaPindenContext = new PaaPindenContext(options);
+        await paaPindenContext.Database.EnsureCreatedAsync();
+
+        // Clear existing data
+        paaPindenContext.Projects.RemoveRange(paaPindenContext.Projects);
+        await paaPindenContext.SaveChangesAsync();
+        // Add test data
+        testProject = new Project
         {
-            // Ensure the database is created
-            await paaPindenContext.Database.EnsureCreatedAsync();
-            // Clear existing data
-            paaPindenContext.Projects.RemoveRange(paaPindenContext.Projects);
-            await paaPindenContext.SaveChangesAsync();
-            // Add test data
-            testProject = new Project
-            {
-                Title = "Test Project",
-                Note = "This is a test project.",
-                Needle = "Size 8",
-                YarnType = "Wool",
-                Recipe = "Test Recipe",
-                Round = 10,
-                Stitch = 20,
-                UserId = "testuser"
-            };
-            paaPindenContext.Projects.Add(testProject);
-            await paaPindenContext.SaveChangesAsync();
-        }
+            Title = "Test Project",
+            Note = "This is a test project.",
+            Needle = "Size 8",
+            YarnType = "Wool",
+            Recipe = "Test Recipe",
+            Round = 10,
+            Stitch = 20,
+            UserId = "84cd148c-e055-4d01-8a32-d06e7489e2a3"
+        };
+        paaPindenContext.Projects.Add(testProject);
+        await paaPindenContext.SaveChangesAsync();
+
+        testProjectRepo = new ProjectRepository(paaPindenContext);
     }
 
     [TestMethod]
@@ -57,7 +58,7 @@ public sealed class ProjectRepositoryUnitTest
             Recipe = "New Test Recipe",
             Round = 12,
             Stitch = 10,
-            UserId = "testuser"
+            UserId = "84cd148c-e055-4d01-8a32-d06e7489e2a3"
         };
 
         // Act
