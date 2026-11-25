@@ -28,6 +28,19 @@ namespace Tests
         private ServiceProvider? _provider;
         private PaaPindenAPIService? _paaPindenAPIService;
 
+        [TestInitialize]
+        public async Task Init()
+        {
+            ServiceCollection services = new ServiceCollection();
+            services.AddHttpClient("PaaPindenClient", client =>
+            {
+                client.BaseAddress = new Uri("http://localhost:5044/");
+            });
+            _provider = services.BuildServiceProvider();
+            IHttpClientFactory factory = _provider.GetRequiredService<IHttpClientFactory>();
+            _paaPindenAPIService = new PaaPindenAPIService(factory);
+
+            await DatabaseInit();
 
             if (_testMethodComment != null)
             {
