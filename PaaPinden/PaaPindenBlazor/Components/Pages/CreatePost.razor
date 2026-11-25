@@ -31,10 +31,8 @@
         <div class="col-6">
             <InputFile name="knittingPost.ImageFile" accept="image/*" class="form-control" />
         </div>
-        <div class="col-6">
-            <InputText @bind-Value="knittingPost.KnittingPostContent.Text" class="form-control"></InputText>
-        </div>
-        <div class="col">
+
+            <div>
             <ValidationMessage For="() => knittingPost.KnittingPostContent.Text"></ValidationMessage>
         </div> 
         <br />
