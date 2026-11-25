@@ -1,0 +1,18 @@
+﻿@page "/projects/{Directive}/{Id:int?}"
+@inject IPaaPindenAPIService _paaPindenAPIService
+
+@if (Directive == "read")
+{
+    <FullProject ProjectId="@Id"/>
+}
+else if (Directive == "create" || Directive == "update")
+{
+    <ProjectForm ProjectId="@Id" Directive="@Directive" />
+}
+
+@code {
+    [Parameter]
+    public string? Directive { get; set; }
+    [Parameter]
+    public int Id { get; set; }
+}

@@ -18,6 +18,7 @@ namespace Tests
     {
         private PaaPindenContext? _paaPindenContextForInit;
         private PaaPindenContext? _paaPindenContextForRepo;
+        private User? _testInitializeUser;
         private KnittingPost? _testInitializeKnittingPost;
         private Comment? _testMethodComment;
         private CommentDTO? _testMethodCommentDTO;
@@ -27,96 +28,105 @@ namespace Tests
         private ServiceProvider? _provider;
         private PaaPindenAPIService? _paaPindenAPIService;
 
-        //[TestInitialize]
-        //public async Task Init()
-        //{
-        //    ServiceCollection services = new ServiceCollection();
-        //    services.AddHttpClient("PaaPindenClient", client =>
-        //    {
-        //        client.BaseAddress = new Uri("http://localhost:5044/");
-        //    });
-        //    _provider = services.BuildServiceProvider();
-        //    IHttpClientFactory factory = _provider.GetRequiredService<IHttpClientFactory>();
-        //    _paaPindenAPIService = new PaaPindenAPIService(factory);
 
-        //    await DatabaseInit();
+            if (_testMethodComment != null)
+            {
+                _testMethodCommentDTO = new CommentDTO()
+                {
+                    Id = _testMethodComment.Id,
+                    CommentKnittingPostId = _testMethodComment.CommentKnittingPostId,
+                    Text = _testMethodComment.Text,
+                    TimeStamp = _testMethodComment.TimeStamp,
+                    UserId = _testMethodComment.UserId
+                };
+            }
 
-        //    if (_testMethodComment != null)
-        //    {
-        //        _testMethodCommentDTO = new CommentDTO()
-        //        {
-        //            Id = _testMethodComment.Id,
-        //            CommentKnittingPostId = _testMethodComment.CommentKnittingPostId,
-        //            Text = _testMethodComment.Text,
-        //            TimeStamp = _testMethodComment.TimeStamp,
-        //            Writer = _testMethodComment.Writer
-        //        };
-        //    }
+            if (_testInitializeComment != null)
+            {
+                _testInitializeCommentDTO = new CommentDTO()
+                {
+                    Id = _testInitializeComment.Id,
+                    CommentKnittingPostId = _testInitializeComment.CommentKnittingPostId,
+                    Text = _testInitializeComment.Text,
+                    TimeStamp = _testInitializeComment.TimeStamp,
+                    UserId = _testInitializeComment.UserId
+                };
+            }
+        }
 
-        //    if (_testInitializeComment != null)
-        //    {
-        //        _testInitializeCommentDTO = new CommentDTO()
-        //        {
-        //            Id = _testInitializeComment.Id,
-        //            CommentKnittingPostId = _testInitializeComment.CommentKnittingPostId,
-        //            Text = _testInitializeComment.Text,
-        //            TimeStamp = _testInitializeComment.TimeStamp,
-        //            Writer = _testInitializeComment.Writer
-        //        };
-        //    }
-        //}
+        private async Task DatabaseInit()
+        {
+            _paaPindenContextForInit = new PaaPindenContext(new DbContextOptionsBuilder<PaaPindenContext>()
+                .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=PaaPindenDb;Integrated Security=true;Encrypt=true;Trust Server Certificate=True").Options);
+            _paaPindenContextForRepo = new PaaPindenContext(new DbContextOptionsBuilder<PaaPindenContext>()
+                .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=PaaPindenDb;Integrated Security=true;Encrypt=true;Trust Server Certificate=True").Options);
+            _testInitializeUser = new User()
+            {
+                Id = "84cd148c-e055-4d01-8a32-d06e7489e2a3",
+                UserName = "test",
+                NormalizedUserName = "TEST",
+                Email = "test@test.test",
+                NormalizedEmail = "TEST@TEST.TEST",
+                EmailConfirmed = true,
+                PasswordHash = "AQAAAAIAAYagAAAAEDU5ss3/xPgY9SmYXgjbzqrnwgKE4cQpHkYP+zu0cfUKVes0+fsTo/Y1micgg+lFrQ==",
+                SecurityStamp = "E6PKSVRQKLTX6JM23QOOG7NSEMZAT47O",
+                ConcurrencyStamp = "451190ea-b605-4320-980a-6b863f169b73",
+                PhoneNumber = null,
+                PhoneNumberConfirmed = false,
+                TwoFactorEnabled = false,
+                LockoutEnd = null,
+                LockoutEnabled = true,
+                AccessFailedCount = 0
+            };
+            _testInitializeKnittingPost = new KnittingPost
+            {
+                Title = "Første opslag",
+                TimeStamp = DateTime.Today,
+                UserId = "84cd148c-e055-4d01-8a32-d06e7489e2a3",
+                KnittingPostContent = new Content
+                {
+                    Text = "Mit første opslag!",
+                    Pictures = new List<ContentPicture>()
+                    {
+                        new ContentPicture
+                        {
+                            Path = "C:\\repositories\\Paa_Pinden\\PaaPinden\\PaaPindenBlazor\\wwwroot\\images\\test1.png"
+                        }
+                    },
+                    Videos = new List<ContentVideo>()
+                    {
+                        new ContentVideo
+                        {
+                            Path = "~/path/to/video"
+                        }
+                    }
+                }
+            };
+            _testMethodComment = new Comment()
+            {
+                CommentKnittingPostId = _testInitializeKnittingPost.Id,
+                Text = "test kommentar",
+                UserId = "84cd148c-e055-4d01-8a32-d06e7489e2a3",
+                TimeStamp = DateTime.Today
+            };
+            _testInitializeComment = new Comment()
+            {
+                CommentKnittingPostId = _testInitializeKnittingPost.Id,
+                Text = "første kommentar",
+                UserId = "84cd148c-e055-4d01-8a32-d06e7489e2a3",
+                TimeStamp = DateTime.Today
+            };
 
-        //private async Task DatabaseInit()
-        //{
-        //    _paaPindenContextForInit = new PaaPindenContext(new DbContextOptionsBuilder<PaaPindenContext>()
-        //        .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=PaaPindenDb;Integrated Security=true;Encrypt=true;Trust Server Certificate=True").Options);
-        //    _paaPindenContextForRepo = new PaaPindenContext(new DbContextOptionsBuilder<PaaPindenContext>()
-        //        .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=PaaPindenDb;Integrated Security=true;Encrypt=true;Trust Server Certificate=True").Options);
-        //    _testInitializeKnittingPost = new KnittingPost
-        //    {
-        //        Title = "Første opslag",
-        //        TimeStamp = DateTime.Today,
-        //        Author = "Jens",
-        //        KnittingPostContent = new Content
-        //        {
-        //            Text = "Mit første opslag!",
-        //            Pictures = new List<ContentPicture>()
-        //            {
-        //                new ContentPicture
-        //                {
-        //                    Path = "~/path/to/picture"
-        //                }
-        //            },
-        //            Videos = new List<ContentVideo>()
-        //            {
-        //                new ContentVideo
-        //                {
-        //                    Path = "~/path/to/video"
-        //                }
-        //            }
-        //        }
-        //    };
-        //    _testMethodComment = new Comment()
-        //    {
-        //        CommentKnittingPostId = _testInitializeKnittingPost.Id,
-        //        Text = "test kommentar",
-        //        Writer = "jens fjende",
-        //        TimeStamp = DateTime.Today
-        //    };
-        //    _testInitializeComment = new Comment()
-        //    {
-        //        CommentKnittingPostId = _testInitializeKnittingPost.Id,
-        //        Text = "første kommentar",
-        //        Writer = "jens fjende",
-        //        TimeStamp = DateTime.Today
-        //    };
-
-        //    _paaPindenContextForInit.Database.EnsureDeleted();
-        //    _paaPindenContextForInit.Database.EnsureCreated();
-        //    _paaPindenContextForInit.KnittingPosts.RemoveRange(_paaPindenContextForInit.KnittingPosts.AsNoTracking());
-        //    _paaPindenContextForInit.SaveChanges();
-        //    _paaPindenContextForInit.KnittingPosts.Add(_testInitializeKnittingPost);
-        //    _paaPindenContextForInit.SaveChanges();
+            _paaPindenContextForInit.Database.EnsureDeleted();
+            _paaPindenContextForInit.Database.EnsureCreated();
+            _paaPindenContextForInit.Users.RemoveRange(_paaPindenContextForInit.Users.AsNoTracking());
+            _paaPindenContextForInit.SaveChanges();
+            _paaPindenContextForInit.KnittingPosts.RemoveRange(_paaPindenContextForInit.KnittingPosts.AsNoTracking());
+            _paaPindenContextForInit.SaveChanges();
+            _paaPindenContextForInit.Users.Add(_testInitializeUser);
+            _paaPindenContextForInit.SaveChanges();
+            _paaPindenContextForInit.KnittingPosts.Add(_testInitializeKnittingPost);
+            _paaPindenContextForInit.SaveChanges();
 
         //    _testInitializeComment.CommentKnittingPostId = _testInitializeKnittingPost.Id;
         //    _testMethodComment.CommentKnittingPostId = _testInitializeKnittingPost.Id;
@@ -144,13 +154,13 @@ namespace Tests
         //    // Act
         //    await _paaPindenAPIService.CreateCommentAsync(_testMethodCommentDTO);
 
-        //    // Assert
-        //    var actualResult = _paaPindenContextForRepo.Comments.Where(c => c.Id == _testMethodComment.Id).FirstOrDefault();
-        //    Assert.AreEqual(expectedResult.CommentKnittingPostId, actualResult.CommentKnittingPostId);
-        //    Assert.AreEqual(expectedResult.Text, actualResult.Text);
-        //    Assert.AreEqual(expectedResult.TimeStamp, actualResult.TimeStamp);
-        //    Assert.AreEqual(expectedResult.Writer, actualResult.Writer);
-        //}
+            // Assert
+            var actualResult = _paaPindenContextForRepo.Comments.Where(c => c.Id == _testMethodComment.Id).FirstOrDefault();
+            Assert.AreEqual(expectedResult.CommentKnittingPostId, actualResult.CommentKnittingPostId);
+            Assert.AreEqual(expectedResult.Text, actualResult.Text);
+            Assert.AreEqual(expectedResult.TimeStamp, actualResult.TimeStamp);
+            Assert.AreEqual(expectedResult.UserId, actualResult.UserId);
+        }
 
         //[TestMethod]
         //public async Task UpdateCommentAsync_Test()
@@ -163,13 +173,13 @@ namespace Tests
         //    // Act
         //    await _paaPindenAPIService.UpdateCommentAsync(_testInitializeCommentDTO);
 
-        //    // Assert
-        //    var actualResult = _paaPindenContextForRepo.Comments.Where(c => c.Id == _testInitializeComment.Id).FirstOrDefault();
-        //    Assert.AreEqual(expectedResult.Text, actualResult.Text);
-        //    Assert.AreEqual(expectedResult.TimeStamp, actualResult.TimeStamp);
-        //    Assert.AreEqual(expectedResult.Writer, actualResult.Writer);
-        //    Assert.AreEqual(expectedResult.CommentKnittingPostId, actualResult.CommentKnittingPostId);
-        //}
+            // Assert
+            var actualResult = _paaPindenContextForRepo.Comments.Where(c => c.Id == _testInitializeComment.Id).FirstOrDefault();
+            Assert.AreEqual(expectedResult.Text, actualResult.Text);
+            Assert.AreEqual(expectedResult.TimeStamp, actualResult.TimeStamp);
+            Assert.AreEqual(expectedResult.UserId, actualResult.UserId);
+            Assert.AreEqual(expectedResult.CommentKnittingPostId, actualResult.CommentKnittingPostId);
+        }
 
         //[TestMethod]
         //public async Task GetAllPostCommentsAsync_Test()

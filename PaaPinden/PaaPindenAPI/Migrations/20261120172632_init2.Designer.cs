@@ -12,8 +12,8 @@ using PaaPindenAPI.Data;
 namespace PaaPindenAPI.Migrations
 {
     [DbContext(typeof(PaaPindenContext))]
-    [Migration("20261120114249_updateForTest")]
-    partial class updateForTest
+    [Migration("20261120172632_init2")]
+    partial class init2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -396,6 +396,19 @@ namespace PaaPindenAPI.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Projects");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Needle = "2mm",
+                            Recipe = "big text",
+                            Round = 0,
+                            Stitch = 0,
+                            Title = "Min nye halsedisse",
+                            UserId = "84cd148c-e055-4d01-8a32-d06e7489e2a3",
+                            YarnType = "Rødt garn"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -4,14 +4,10 @@ namespace PaaPindenAPI.Repositories
 {
     public interface IProjectRepository
     {
-        public Task<Project?> GetProjectAsync(int projectId);
-
-        public Task<List<Project>> GetUserProjectsAsync(int userId);
-
-        public Task CreateProjectAsync(Project project);
-
-        public Task UpdateProjectAsync(Project project);
-
-        public Task DeleteProjectAsync(int projectId);
+        Task<Project> GetProjectAsync(int id);
+        Task<List<Project>> GetUserProjectsAsync(string userId);
+        Task CreateProjectAsync(Project project);
+        Task UpdateProjectAsync(Project project);
+        Task DeleteProjectAsync(int id);
     }
 }
