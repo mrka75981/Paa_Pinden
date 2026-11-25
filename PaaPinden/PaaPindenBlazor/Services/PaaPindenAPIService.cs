@@ -39,6 +39,19 @@ namespace PaaPindenBlazor.Services
             using var response = await httpClient.SendAsync(request);
         }
 
+        public async Task CreateProjectAsync(Project project)
+        {
+            using var httpClient = _httpClientFactory.CreateClient("PaaPindenClient");
+            var productjson = JsonSerializer.Serialize(project);
+            using var request = new HttpRequestMessage(HttpMethod.Post, $"api/Project");
+            request.Content = new StringContent(
+                productjson,
+                System.Text.Encoding.UTF8,
+                "application/json");
+
+            using var response = await httpClient.SendAsync(request);
+        }
+
         public async Task DeleteCommentAsync(int id)
         {
             using var httpClient = _httpClientFactory.CreateClient("PaaPindenClient");
@@ -50,6 +63,13 @@ namespace PaaPindenBlazor.Services
         {
             using var httpClient = _httpClientFactory.CreateClient("PaaPindenClient");
             using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/KnittingPost/{id}");
+            using var response = await httpClient.SendAsync(request);
+        }
+
+        public async Task DeleteProjectAsync(int projectid)
+        {
+            using var httpClient = _httpClientFactory.CreateClient("PaaPindenClient");
+            using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/Project/{projectid}");
             using var response = await httpClient.SendAsync(request);
         }
 
@@ -83,6 +103,26 @@ namespace PaaPindenBlazor.Services
             return knittingPost;
         }
 
+        public async Task<Project> GetProjectAsync(int id)
+        {
+            using var httpClient = _httpClientFactory.CreateClient("PaaPindenClient");
+            using var request = new HttpRequestMessage(HttpMethod.Get, $"api/Project/{id}");
+            using var response = await httpClient.SendAsync(request);
+            Project project = await response.Content.ReadFromJsonAsync<Project>();
+
+            return project;
+        }
+
+        public async Task<List<Project>> GetUserProjectsAsync(string userid)
+        {
+            using var httpClient = _httpClientFactory.CreateClient("PaaPindenClient");
+            using var request = new HttpRequestMessage(HttpMethod.Get, $"api/Project/user/{userid}");
+            using var response = await httpClient.SendAsync(request);
+            List<Project> projects = await response.Content.ReadFromJsonAsync<List<Project>>();
+
+            return projects;
+        }
+
         public async Task UpdateCommentAsync(CommentDTO commentDTO)
         {
             using var httpClient = _httpClientFactory.CreateClient("PaaPindenClient");
@@ -108,6 +148,19 @@ namespace PaaPindenBlazor.Services
 
             using var response = await httpClient.SendAsync(request);
             response.EnsureSuccessStatusCode();
+        }
+
+        public async Task UpdateProjectAsync(Project project)
+        {
+            using var httpClient = _httpClientFactory.CreateClient("PaaPindenClient");
+            var productjson = JsonSerializer.Serialize(project);
+            using var request = new HttpRequestMessage(HttpMethod.Put, $"api/Project");
+            request.Content = new StringContent(
+                productjson,
+                System.Text.Encoding.UTF8,
+                "application/json");
+
+            using var response = await httpClient.SendAsync(request);
         }
     }
 }

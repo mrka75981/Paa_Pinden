@@ -1,5 +1,4 @@
 ﻿@page "/createpost"
-@using PaaPindenBlazor.NonRouteableComponents
 @inject IPaaPindenAPIService PaaPindenAPI
 @inject NavigationManager NavigationManager
 @inject IFileModelService FileModelService
@@ -13,7 +12,6 @@
     <InputNumber @bind-Value="knittingPost.Id" hidden></InputNumber>
     <InputDate @bind-Value="knittingPost.TimeStamp" hidden></InputDate>
     <InputText @bind-Value="UserId" hidden></InputText>
-
 
     <div class="mb-3">
         <div class="col-2">
@@ -41,7 +39,7 @@
         <br />
         <button class="btn btn-primary" type="submit">Post</button>
         &nbsp;
-        <a href="/" class="btn btn-primary">Close</a>
+        <a href="/" class="btn btn-danger">Close</a>
     </div>
 </EditForm> 
 <ContentPicturePreview>
@@ -68,7 +66,7 @@
 
     private async Task Submit()
     {
-        var filepath = await FileModelService.UploadFile(knittingPost.ImageFile);
+        var filepath = await FileModelService.UploadFileAsync(knittingPost.ImageFile);
         knittingPost.KnittingPostContent.Pictures[0].Path = filepath;
         await PaaPindenAPI.CreateKnittingPostAsync(new KnittingPostDTO
         {

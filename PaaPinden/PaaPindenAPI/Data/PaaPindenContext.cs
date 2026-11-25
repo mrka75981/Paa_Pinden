@@ -13,6 +13,7 @@ namespace PaaPindenAPI.Data
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Content> Contents { get; set; }
         public DbSet<KnittingPost> KnittingPosts { get; set; }
+        public DbSet<Project> Projects { get; set; }
 
         public PaaPindenContext(DbContextOptions<PaaPindenContext> options) : base(options)
         {
@@ -42,10 +43,27 @@ namespace PaaPindenAPI.Data
                     LockoutEnd = null,
                     LockoutEnabled = true,
                     AccessFailedCount = 0
-                },
+                }
             };
-
             modelbuilder.Entity<User>().HasData(users);
+
+            List<Project> projects = new List<Project>()
+            {
+                new Project()
+                {
+                    Id = 1,
+                    Title = "Min nye halsedisse",
+                    Note = null,
+                    PicturePath = null,
+                    Needle = "2mm",
+                    YarnType = "Rødt garn",
+                    Recipe = "big text",
+                    Round = 0,
+                    Stitch = 0,
+                    UserId = "84cd148c-e055-4d01-8a32-d06e7489e2a3"
+                }
+            };
+            modelbuilder.Entity<Project>().HasData(projects);
 
             modelbuilder.Entity<KnittingPost>();
 
