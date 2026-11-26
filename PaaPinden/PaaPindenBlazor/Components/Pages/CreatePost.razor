@@ -5,7 +5,7 @@
 @inject IFileModelService FileModelService
 
 
-<h1 class="PindenFont text-center" style="margin: 15px; margin-top: 30px;"><b>Opret post</b></h1>
+<h1 class="PindenFont text-center" style="margin: 15px; margin-top: 30px;"><b>Opret opslag</b></h1>
 
 <EditForm Model="knittingPost" FormName="FormKnittingPost" OnValidSubmit="Submit" method="post" enctype="multipart/form-data">
     <DataAnnotationsValidator></DataAnnotationsValidator>
@@ -106,7 +106,7 @@
                     {
                         new ContentVideo
                         {
-                            Path = "~/path/to/thisnew"
+                            Path = filepath
                         }
                     }
             }
