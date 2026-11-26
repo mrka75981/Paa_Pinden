@@ -22,5 +22,15 @@ namespace PaaPindenBlazor.Services
 
         Task DeleteCommentAsync(int id);
 
+        Task<Project> GetProjectAsync(int id);
+
+        Task<List<Project>> GetUserProjectsAsync(string userid);
+
+        Task CreateProjectAsync(Project project);
+
+        Task UpdateProjectAsync(Project project);
+
+        Task DeleteProjectAsync(int projectid);
+
     }
 }

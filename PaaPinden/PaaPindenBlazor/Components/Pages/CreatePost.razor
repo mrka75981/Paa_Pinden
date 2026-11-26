@@ -1,5 +1,4 @@
 ﻿@page "/createpost"
-@using PaaPindenBlazor.NonRouteableComponents
 @inject IPaaPindenAPIService PaaPindenAPI
 @inject NavigationManager NavigationManager
 @inject IFileModelService FileModelService
@@ -12,7 +11,7 @@
     <ValidationSummary></ValidationSummary>
     <InputNumber @bind-Value="knittingPost.Id" hidden></InputNumber>
     <InputDate @bind-Value="knittingPost.TimeStamp" hidden></InputDate>
-    <InputText @bind-Value="knittingPost.Author" hidden></InputText>
+    <InputText @bind-Value="knittingPost.UserId" hidden></InputText>
 
     <form>
         <div class="form-group PindenFont" style="margin: auto; width: 500px;">
@@ -85,13 +84,13 @@
 
     private async Task Submit()
     {
-        var filepath = await FileModelService.UploadFile(knittingPost.ImageFile);
+        var filepath = await FileModelService.UploadFileAsync(knittingPost.ImageFile);
         knittingPost.KnittingPostContent.Pictures[0].Path = filepath;
         await PaaPindenAPI.CreateKnittingPostAsync(new KnittingPostDTO
         {
             Title = knittingPost.Title,
             TimeStamp = DateTime.Today,
-            Author = knittingPost.Author,
+            UserId = knittingPost.UserId,
             KnittingPostContent = new Content
             {
                 Text = knittingPost.KnittingPostContent.Text,
