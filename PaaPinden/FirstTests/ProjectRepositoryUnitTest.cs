@@ -108,7 +108,6 @@ public sealed class ProjectRepositoryUnitTest
     [TestMethod]
     public async Task GetUserProjectsAsync_Test()
     {
-        // To-Do: Create user for the test and assign the project to that user
 
         // Act
         var projects = await testProjectRepo.GetUserProjectsAsync(testProject.UserId);

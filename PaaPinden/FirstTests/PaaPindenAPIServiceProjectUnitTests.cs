@@ -11,7 +11,6 @@ namespace Tests;
 public class PaaPindenAPIServiceProjectUnitTests
 {
     private PaaPindenContext? _paaPindenContextTest;
-    private PaaPindenContext? _paaPindenContextForRepo;
     private User? _testInitializeUser;
     private Project? _testInitializeProject;
     private Project? _testInitializeProject2;
