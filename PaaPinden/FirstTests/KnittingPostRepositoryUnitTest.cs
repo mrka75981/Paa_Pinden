@@ -121,7 +121,7 @@ namespace Tests
             await _testMethodRepo.CreateKnittingPostAsync(_testMethodKnittingPost);
 
             // Assert
-            var actualResult = _paaPindenContextForRepo.KnittingPosts.Where( kp => kp.Id == _testMethodKnittingPost.Id).FirstOrDefault();
+            var actualResult = _paaPindenContextForRepo.KnittingPosts.Where(kp => kp.Id == _testMethodKnittingPost.Id).FirstOrDefault();
             Assert.AreEqual(expectedResult.Id, actualResult.Id);
         }
 
@@ -134,7 +134,7 @@ namespace Tests
             // Act
             var actualResult = await _testMethodRepo.GetKnittingPostAsync(_testInitializeKnittingPost.Id);
 
-            // Assert
+            //Assert
             Assert.AreEqual(expectedResult.Id, actualResult.Id);
             Assert.AreEqual(expectedResult.Title, actualResult.Title);
             Assert.AreEqual(expectedResult.TimeStamp, actualResult.TimeStamp);
