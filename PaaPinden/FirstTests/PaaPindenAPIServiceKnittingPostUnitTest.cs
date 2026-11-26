@@ -17,8 +17,9 @@ namespace Tests
     {
         private PaaPindenContext? _paaPindenContextForInit;
         private PaaPindenContext? _paaPindenContextForRepo;
+        private User? _testInitializeUser;
         private KnittingPost? _testMethodKnittingPost;
-        private KnittingPostDTO _testMethodKnittingPostDTO;
+        private KnittingPostDTO? _testMethodKnittingPostDTO;
         private KnittingPost? _testInitializeKnittingPost;
         private KnittingPostDTO? _testInitializeKnittingPostDTO;
 
@@ -47,7 +48,7 @@ namespace Tests
                     Id = _testMethodKnittingPost.Id,
                     Title = _testMethodKnittingPost.Title,
                     TimeStamp = _testMethodKnittingPost.TimeStamp,
-                    Author = _testMethodKnittingPost.Author,
+                    UserId = _testMethodKnittingPost.UserId,
                     KnittingPostContent = _testMethodKnittingPost.KnittingPostContent
                 };
             }
@@ -59,7 +60,7 @@ namespace Tests
                     Id = _testInitializeKnittingPost.Id,
                     Title = _testInitializeKnittingPost.Title,
                     TimeStamp = _testInitializeKnittingPost.TimeStamp,
-                    Author = _testInitializeKnittingPost.Author,
+                    UserId = _testInitializeKnittingPost.UserId,
                     KnittingPostContent = _testInitializeKnittingPost.KnittingPostContent
                 };
             }
@@ -71,11 +72,29 @@ namespace Tests
                 .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=PaaPindenDb;Integrated Security=true;Encrypt=true;Trust Server Certificate=True").Options);
             _paaPindenContextForRepo = new PaaPindenContext(new DbContextOptionsBuilder<PaaPindenContext>()
                 .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=PaaPindenDb;Integrated Security=true;Encrypt=true;Trust Server Certificate=True").Options);
-            _testMethodKnittingPost = new KnittingPost
+            _testInitializeUser = new User()
+            {
+                Id = "84cd148c-e055-4d01-8a32-d06e7489e2a3",
+                UserName = "test",
+                NormalizedUserName = "TEST",
+                Email = "test@test.test",
+                NormalizedEmail = "TEST@TEST.TEST",
+                EmailConfirmed = true,
+                PasswordHash = "AQAAAAIAAYagAAAAEDU5ss3/xPgY9SmYXgjbzqrnwgKE4cQpHkYP+zu0cfUKVes0+fsTo/Y1micgg+lFrQ==",
+                SecurityStamp = "E6PKSVRQKLTX6JM23QOOG7NSEMZAT47O",
+                ConcurrencyStamp = "451190ea-b605-4320-980a-6b863f169b73",
+                PhoneNumber = null,
+                PhoneNumberConfirmed = false,
+                TwoFactorEnabled = false,
+                LockoutEnd = null,
+                LockoutEnabled = true,
+                AccessFailedCount = 0
+            };
+                _testMethodKnittingPost = new KnittingPost
             {
                 Title = "test opslag",
                 TimeStamp = DateTime.Today,
-                Author = "Jens",
+                UserId = "84cd148c-e055-4d01-8a32-d06e7489e2a3",
                 KnittingPostContent = new Content
                 {
                     Text = "Mit første opslag!",
@@ -83,7 +102,7 @@ namespace Tests
                     {
                         new ContentPicture
                         {
-                            Path = "~/path/to/testpicture"
+                            Path = "C:\\repositories\\Paa_Pinden\\PaaPinden\\PaaPindenBlazor\\wwwroot\\images\\test1.png"
                         }
                     },
                     Videos = new List<ContentVideo>()
@@ -99,13 +118,13 @@ namespace Tests
             {
                 Title = "Første opslag",
                 TimeStamp = DateTime.Today,
-                Author = "Jens",
+                UserId = "84cd148c-e055-4d01-8a32-d06e7489e2a3",
                 Comments = new List<Comment>()
                 {
                     new Comment
                     {
                         Text = "første kommentar",
-                        Writer = "jens fjende",
+                        UserId = "84cd148c-e055-4d01-8a32-d06e7489e2a3",
                         TimeStamp = DateTime.Today
                     }
                 },
@@ -116,7 +135,7 @@ namespace Tests
                     {
                         new ContentPicture
                         {
-                            Path = "~/path/to/picture"
+                            Path = "C:\\repositories\\Paa_Pinden\\PaaPinden\\PaaPindenBlazor\\wwwroot\\images\\test2.png"
                         }
                     },
                     Videos = new List<ContentVideo>()
@@ -131,7 +150,11 @@ namespace Tests
 
             _paaPindenContextForInit.Database.EnsureDeleted();
             _paaPindenContextForInit.Database.EnsureCreated();
+            _paaPindenContextForInit.Users.RemoveRange(_paaPindenContextForInit.Users.AsNoTracking());
+            _paaPindenContextForInit.SaveChanges();
             _paaPindenContextForInit.KnittingPosts.RemoveRange(_paaPindenContextForInit.KnittingPosts.AsNoTracking());
+            _paaPindenContextForInit.SaveChanges();
+            _paaPindenContextForInit.Users.Add(_testInitializeUser);
             _paaPindenContextForInit.SaveChanges();
             _paaPindenContextForInit.KnittingPosts.Add(_testInitializeKnittingPost);
             _paaPindenContextForInit.SaveChanges();
@@ -171,11 +194,11 @@ namespace Tests
             // Act
             var actualResult = await _paaPindenAPIService.GetKnittingPostAsync(_testInitializeKnittingPost.Id);
 
-            // Assert
+            //Assert
             Assert.AreEqual(expectedResult.Id, actualResult.Id);
             Assert.AreEqual(expectedResult.Title, actualResult.Title);
             Assert.AreEqual(expectedResult.TimeStamp, actualResult.TimeStamp);
-            Assert.AreEqual(expectedResult.Author, actualResult.Author);
+            Assert.AreEqual(expectedResult.UserId, actualResult.UserId);
 
             Assert.IsTrue(actualResult.Comments.Select(c => c.Id).All(c => expectedResult.Comments.Select(c => c.Id).Contains(c))); //All actualResults members are contained within expectedResults. 
             Assert.HasCount(expectedResult.Comments.Count, actualResult.Comments); //expectedResults do not have more members than actualResults (rendering the prior assertion incomplete). 

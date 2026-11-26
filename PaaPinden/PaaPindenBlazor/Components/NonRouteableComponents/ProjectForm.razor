@@ -1,0 +1,122 @@
+﻿@inject NavigationManager _navigationManager
+@inject IConversionService _conversionService
+@inject IFileModelService _fileModelService
+@inject IPaaPindenAPIService _paaPindenAPIService
+
+@if (ProjectFormDTO != null)
+{
+    <EditForm Model="ProjectFormDTO" enctype="multipart/form-data" FormName="ProjectForm" OnValidSubmit="Submit">
+        <DataAnnotationsValidator/>
+        <InputNumber @bind-Value="ProjectFormDTO.Id" hidden/>
+        <div class="row mb-3">
+            <label>Title</label>
+            <InputText @bind-Value="ProjectFormDTO.Title" />
+            <ValidationMessage For="() => ProjectFormDTO.Title" />
+        </div>
+        <div class="row mb-3">
+            <label>Note</label>
+            <InputText @bind-Value="ProjectFormDTO.Note" />
+            <ValidationMessage For="() => ProjectFormDTO.Note" />
+        </div>
+        <InputHidden @bind-Value="ProjectFormDTO.PicturePath" />
+        <div class="row mb-3">
+            <label>ImageFile</label>
+            <InputFile name="ProjectFormDTO.ImageFile" />
+            <ValidationMessage For="() => ProjectFormDTO.ImageFile" />
+        </div>
+        <div class="row mb-3">
+            <label>Needle</label>
+            <InputText @bind-Value="ProjectFormDTO.Needle" />
+            <ValidationMessage For="() => ProjectFormDTO.Needle" />
+        </div>
+        <div class="row mb-3">
+            <label>YarnType</label>
+            <InputText @bind-Value="ProjectFormDTO.YarnType" />
+            <ValidationMessage For="() => ProjectFormDTO.YarnType" />
+        </div>
+        <div class="row mb-3">
+            <label>Recipe</label>
+            <InputText @bind-Value="ProjectFormDTO.Recipe" />
+            <ValidationMessage For="() => ProjectFormDTO.Recipe" />
+        </div>
+        <div class="row mb-3">
+            <label>Round</label>
+            <InputNumber @bind-Value="ProjectFormDTO.Round" />
+            <ValidationMessage For="() => ProjectFormDTO.Round" />
+        </div>
+        <div class="row mb-3">
+            <label>Stitch</label>
+            <InputNumber @bind-Value="ProjectFormDTO.Stitch" />
+            <ValidationMessage For="() => ProjectFormDTO.Stitch" />
+        </div>
+        <InputHidden @bind-Value="ProjectFormDTO.UserId" />
+        <button class="btn btn-primary" type="submit">@Directive</button>
+        <a href="/projects" class="btn btn-primary">Close</a>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public string? Directive { get; set; }
+    [Parameter]
+    public int ProjectId { get; set; }
+    [SupplyParameterFromForm(FormName = "ProjectForm")]
+    public ProjectFormDTO? ProjectFormDTO { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        switch (Directive)
+        {
+            case "create":
+                ProjectFormDTO ??= new ProjectFormDTO();
+
+                //Until login is made the user is hardcoded
+                ProjectFormDTO.UserId = "84cd148c-e055-4d01-8a32-d06e7489e2a3";
+
+                break;
+            case "update":
+                Project? project;
+                project = await _paaPindenAPIService.GetProjectAsync(ProjectId);
+                if (project != null)
+                {
+                    ProjectFormDTO ??= _conversionService.ToProjectFormDTO(project);
+                }
+                break;
+        }
+    }
+
+    private async Task Submit()
+    {
+        if (ProjectFormDTO != null)
+        {
+            switch (Directive)
+            {
+                case "create":
+                    if (ProjectFormDTO.ImageFile != null)
+                    {
+                        ProjectFormDTO.PicturePath = await _fileModelService.UploadFileAsync(ProjectFormDTO.ImageFile);
+                    }
+
+                    await _paaPindenAPIService.CreateProjectAsync(_conversionService.ToProject(ProjectFormDTO));
+                    break;
+                case "update":
+                    if (ProjectFormDTO.ImageFile != null)
+                    {
+                        if (_conversionService.ToProject(ProjectFormDTO).PicturePath == null)
+                        {
+                            ProjectFormDTO.PicturePath = await _fileModelService.UploadFileAsync(ProjectFormDTO.ImageFile);
+                        }
+                        else if (ProjectFormDTO.PicturePath != null)
+                        {
+                            await _fileModelService.UpdateFileAsync(ProjectFormDTO.ImageFile, ProjectFormDTO.PicturePath);
+                        }
+                    }
+
+                    await _paaPindenAPIService.UpdateProjectAsync(_conversionService.ToProject(ProjectFormDTO));
+                    break;
+            }
+        }
+
+        _navigationManager.NavigateTo("/projects");
+    }
+}
