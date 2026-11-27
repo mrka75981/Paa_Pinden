@@ -55,12 +55,12 @@
 
             <div style="margin-bottom: 50px">
                 <button class="btn" type="submit" style="background-color: #e8aeb5; width: 100px;">Opret</button>
-                <a href="/" class="btn btn-secondary"style="width: 60px;">Luk</a>
+                <a href="/" class="btn btn-secondary" style="width: 60px;">Luk</a>
             </div>
         </div>
     </form>
 
-</EditForm> 
+</EditForm>
 <ContentPicturePreview>
 
 </ContentPicturePreview>
@@ -101,16 +101,16 @@
                     {
                         Path = filepath
                     }
-                }, 
+                },
                 Videos = new List<ContentVideo>()
+                {
+                    new ContentVideo
                     {
-                        new ContentVideo
-                        {
-                            Path = filepath
-                        }
+                        Path = filepath
                     }
+                }
             }
-            
+
         });
         NavigationManager.NavigateTo("/");
     }
