@@ -4,16 +4,25 @@
 
 @if (project != null)
 {
-    <div class="col-md card">
-        <p>@project.Title</p>
-        <p>@project.Note</p>
-        <p>@project.Needle</p>
-        <p>@project.YarnType</p>
-        <p>@project.Recipe</p>
-        <p>@project.Round</p>
-        <p>@project.Stitch</p>
-
-        <img src="@filePath" />
+    <div class="row">
+        <div class="col-sm-10">
+            <p>@project.Title</p>
+            <p>@project.Note</p>
+            <p>@project.Needle</p>
+            <p>@project.YarnType</p>
+            <p>@project.Recipe</p>
+            <p>@project.Round</p>
+            <p>@project.Stitch</p>
+            <img src="@filePath" class="card-img-bottom" />
+        </div>
+        <div class="col-sm-1">
+            <NavLink class="nav-link" href="@($"projects/update/{project.Id}")">Rediger</NavLink>
+        </div>
+        <div class="col-sm-1">
+            <EditForm Model="project" FormName="@($"{project.Title}Form")" OnSubmit="Delete">
+                <button type="submit">Slet projekt</button>
+            </EditForm>
+        </div>
     </div>
 }
 
@@ -34,5 +43,19 @@
                 filePath = await _fileModelService.GetFilePathWithVersionAsync(project.PicturePath);
             }
         }
+    }
+
+    private async Task Delete()
+    {
+        if (project != null)
+        {
+            if (project.PicturePath != null)
+            {
+                await _fileModelService.DeleteFileAsync(project.PicturePath);
+            }
+            await _paaPindenAPIService.DeleteProjectAsync(project.Id);
+        }
+
+        _navigationManager.NavigateTo("projects");
     }
 }
