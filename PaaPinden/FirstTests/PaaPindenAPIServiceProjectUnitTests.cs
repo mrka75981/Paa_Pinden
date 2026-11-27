@@ -37,8 +37,6 @@ public class PaaPindenAPIServiceProjectUnitTests
     {
         _paaPindenContextTest = new PaaPindenContext(new DbContextOptionsBuilder<PaaPindenContext>()
             .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=PaaPindenDb;Integrated Security=true;Encrypt=true;Trust Server Certificate=True").Options);
-        _paaPindenContextForRepo = new PaaPindenContext(new DbContextOptionsBuilder<PaaPindenContext>()
-            .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=PaaPindenDb;Integrated Security=true;Encrypt=true;Trust Server Certificate=True").Options);
         _testInitializeUser = new User()
         {
             Id = "84cd148c-e055-4d01-8a32-d06e7489e2a3",
