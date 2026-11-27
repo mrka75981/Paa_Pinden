@@ -9,6 +9,7 @@
     src: url(/assets/Sniglet-Regular.ttf)
 }
 
-.PindenFont{
+.PindenFont {
     font-family: Sniglet;
+    color: #5d2d41;
 }
