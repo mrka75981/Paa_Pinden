@@ -1,0 +1,123 @@
+﻿@page "/editpost/{id:int}"
+@inject IPaaPindenAPIService PaaPindenAPI
+@inject NavigationManager NavigationManager
+<h3>EditPost</h3>
+
+@if (knittingPost.Id != 0)
+{
+    <EditForm Model="KnittingPostDTO" FormName="FormKnittingPost" OnValidSubmit="Submit">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <ValidationSummary></ValidationSummary>
+        <InputNumber @bind-Value="KnittingPostDTO.Id" hidden></InputNumber>
+        <InputDate @bind-Value="KnittingPostDTO.TimeStamp" hidden></InputDate>
+        <InputText @bind-Value="KnittingPostDTO.UserId" hidden></InputText>
+        <InputNumber @bind-Value="KnittingPostDTO.KnittingPostContent.Id" hidden></InputNumber>
+        <InputNumber @bind-Value="KnittingPostDTO.KnittingPostContent.KnittingPostId" hidden></InputNumber>
+        <InputText @bind-Value="KnittingPostDTO.KnittingPostContent.Pictures[0].Path" hidden></InputText>
+        <InputText @bind-Value="KnittingPostDTO.KnittingPostContent.Videos[0].Path" hidden></InputText>
+
+
+
+        <div class="mb-3">
+            <div class="col-2">
+                <label class="col-form-label">Title</label>
+            </div>
+            <div class="col-6">
+                <InputText @bind-Value="@(KnittingPostDTO.Title)" placeholder="@KnittingPostDTO.Title" class="form-control"></InputText>
+            </div>
+            <div class="col">
+                <ValidationMessage For="() => KnittingPostDTO.Title"></ValidationMessage>
+            </div>
+
+            <div class="col-2">
+                <label class="col-form-label">Indhold</label>
+            </div>
+            @* <div class="col-6">
+                <InputFile name="knittingPost.ImageFile" accept="image/*" class="form-control" />
+            </div> *@
+            <div class="col-6">
+                <InputText @bind-Value="@(KnittingPostDTO.KnittingPostContent.Text)" placeholder="@KnittingPostDTO.KnittingPostContent.Text"
+                           class="form-control"></InputText>
+            </div>
+            <div class="col">
+                <ValidationMessage For="() => KnittingPostDTO.KnittingPostContent.Text"></ValidationMessage>
+            </div>
+            <br />
+            <button class="btn btn-primary" type="submit">Save</button>
+            &nbsp;
+            <a href="/" class="btn btn-primary">Cancel</a> 
+        </div>
+    </EditForm> 
+
+    <EditForm Model="KnittingPostDTO" FormName="DeletePostForm" OnValidSubmit="DeletePost" >
+        <div class="mb-3">
+            <button class="btn btn-danger" type="submit">Delete</button>
+        </div>
+    </EditForm>
+
+    
+} 
+@* else
+{
+    NavigationManager.NavigateTo("/NotFound");
+} *@
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    [SupplyParameterFromForm(FormName = "FormKnittingPost")]
+    private KnittingPostDTO KnittingPostDTO { get; set; } = new()
+    {
+        KnittingPostContent = new Content
+        {
+            Pictures = new List<ContentPicture>(),
+            Videos = new List<ContentVideo>()
+        }
+    };
+
+    private KnittingPost knittingPost = new();
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        knittingPost = await PaaPindenAPI.GetKnittingPostAsync(id);
+        if (knittingPost.Id == 0)
+        {
+            return;
+        }
+
+
+        knittingPost.KnittingPostContent.Pictures ??= new List<ContentPicture>();
+        knittingPost.KnittingPostContent.Videos ??= new List<ContentVideo>();
+
+        if (KnittingPostDTO.Id == 0)
+        {
+            KnittingPostDTO = new KnittingPostDTO
+            {
+                Id = knittingPost.Id,
+                Title = knittingPost.Title,
+                TimeStamp = knittingPost.TimeStamp,
+                UserId = knittingPost.UserId,
+                KnittingPostContent = knittingPost.KnittingPostContent
+            };
+        }
+    }
+
+
+    private async Task Submit()
+    {
+
+        await PaaPindenAPI.UpdateKnittingPostAsync(KnittingPostDTO);
+        NavigationManager.NavigateTo("/");
+    }
+
+    private async Task DeletePost()
+    {
+        await PaaPindenAPI.DeleteKnittingPostAsync(KnittingPostDTO.Id);
+        NavigationManager.NavigateTo("/");
+    }
+
+} 
+
+

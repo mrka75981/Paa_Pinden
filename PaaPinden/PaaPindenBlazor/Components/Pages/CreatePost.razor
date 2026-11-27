@@ -11,7 +11,7 @@
     <ValidationSummary></ValidationSummary>
     <InputNumber @bind-Value="knittingPost.Id" hidden></InputNumber>
     <InputDate @bind-Value="knittingPost.TimeStamp" hidden></InputDate>
-    <InputText @bind-Value="knittingPost.UserId" hidden></InputText>
+    <InputText @bind-Value="UserId" hidden></InputText>
 
     <form>
         <div class="form-group PindenFont" style="margin: auto; width: 500px;">
@@ -68,6 +68,8 @@
 @code {
     [SupplyParameterFromForm(FormName = "FormKnittingPost")]
     private KnittingPostCreateDTO knittingPost { get; set; }
+    private string UserId { get; set; } = "84cd148c-e055-4d01-8a32-d06e7489e2a3";
+
     protected override void OnParametersSet()
     {
         knittingPost ??= new KnittingPostCreateDTO();
@@ -81,7 +83,6 @@
         }
     }
 
-
     private async Task Submit()
     {
         var filepath = await FileModelService.UploadFileAsync(knittingPost.ImageFile);
@@ -90,7 +91,7 @@
         {
             Title = knittingPost.Title,
             TimeStamp = DateTime.Today,
-            UserId = knittingPost.UserId,
+            UserId = UserId,
             KnittingPostContent = new Content
             {
                 Text = knittingPost.KnittingPostContent.Text,
@@ -113,5 +114,4 @@
         });
         NavigationManager.NavigateTo("/");
     }
-
 }

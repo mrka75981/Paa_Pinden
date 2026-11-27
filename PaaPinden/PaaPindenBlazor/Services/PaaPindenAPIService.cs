@@ -147,6 +147,7 @@ namespace PaaPindenBlazor.Services
                 "application/json");
 
             using var response = await httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
         }
 
         public async Task UpdateProjectAsync(Project project)
